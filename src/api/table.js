@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 
-export function getList(params) {
+export function getList() {
   return request({
-    url: '/table/list',
-    method: 'get',
-    params
+    url: '?m=events&a=getEventsList',
+    method: 'post',
+    data: null
   })
 }
