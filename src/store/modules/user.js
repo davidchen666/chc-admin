@@ -49,7 +49,7 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-          console.log(response);
+          // console.log(response);
           const data = response.resData
           commit('SET_ROLES', ['admin'])
           commit('SET_NAME', data.user_name)

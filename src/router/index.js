@@ -42,13 +42,13 @@ export const constantRouterMap = [
     component: Layout,
     redirect: '/example/table',
     name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    meta: { title: 'example', icon: 'example' },
     children: [
       {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: 'table', icon: 'table' }
       },
       {
         path: 'tree',
@@ -56,6 +56,45 @@ export const constantRouterMap = [
         component: () => import('@/views/tree/index'),
         meta: { title: 'Tree', icon: 'tree' }
       }
+    ]
+  },
+  {
+    path: '/events',
+    component: Layout,
+    redirect: '/events/list',
+    name: 'Events',
+    meta: { title: '会议管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'EventsList',
+        component: () => import('@/views/events/index'),
+        meta: { title: '会议列表', icon: 'table' }
+      },
+      {
+        path: 'detail',
+        name: 'EventsDetail',
+        component: () => import('@/views/events/detail'),
+        meta: { title: '会议详情', icon: 'table' },
+        hidden: true
+      },
+      {
+        path: 'add',
+        name: 'EventsAdd',
+        component: () => import('@/views/events/detail'),
+        meta: { title: '添加会议', icon: 'table' },
+        // redirect: '/events/add/info',
+        // children: [  
+        //   { 
+        //     path: "info", 
+        //     name: 'EventsInfo',
+        //     component: () => import('@/views/events/detail/info'), 
+        //     meta: { title: '添加会议信息', icon: 'table' },
+        //     hidden: true
+        //   }  
+        // ] 
+      },
+      
     ]
   },
 
@@ -72,7 +111,7 @@ export const constantRouterMap = [
     ]
   },
 
-  { path: '*', redirect: '/404', hidden: true }
+  // { path: '*', redirect: '/404', hidden: true }
 ]
 
 export default new Router({
