@@ -3,12 +3,12 @@
     <el-tabs type="border-card">
         <el-tab-pane label="会议信息"><eventsInfo></eventsInfo></el-tab-pane>
         <el-tab-pane label="关于会议"><eventsAbout></eventsAbout></el-tab-pane>
-        <el-tab-pane label="会议日程">会议日程</el-tab-pane>
-        <el-tab-pane label="会议嘉宾">会议嘉宾</el-tab-pane>
-        <el-tab-pane label="支持媒体">支持媒体</el-tab-pane>
-        <el-tab-pane label="历届会议">历届会议</el-tab-pane>
-        <el-tab-pane label="会议价格">会议价格</el-tab-pane>
-        <el-tab-pane label="路演项目">路演项目</el-tab-pane>
+        <el-tab-pane label="会议日程"><eventsSchedule></eventsSchedule></el-tab-pane>
+        <el-tab-pane label="会议嘉宾"><eventsSpeaker></eventsSpeaker></el-tab-pane>
+        <el-tab-pane label="支持媒体"><eventsSupportMedia></eventsSupportMedia></el-tab-pane>
+        <el-tab-pane label="历届会议"><eventsPastEvents></eventsPastEvents></el-tab-pane>
+        <el-tab-pane label="会议价格"><eventsCost></eventsCost></el-tab-pane>
+        <el-tab-pane label="路演项目"><eventsRoadShow></eventsRoadShow></el-tab-pane>
     </el-tabs>
     <!-- <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="Activity name">
@@ -60,8 +60,14 @@
 <script>
 import eventsInfo from './detail/info.vue' 
 import eventsAbout from './detail/about.vue' 
+import eventsCost from './detail/cost.vue' 
+import eventsPastEvents from './detail/pastEvents.vue' 
+import eventsRoadShow from './detail/roadShow.vue' 
+import eventsSchedule from './detail/schedule.vue' 
+import eventsSpeaker from './detail/speaker.vue' 
+import eventsSupportMedia from './detail/supportMedia.vue' 
 export default {
-    components: {eventsInfo,eventsAbout},  
+    components: {eventsInfo,eventsAbout,eventsCost,eventsPastEvents,eventsRoadShow,eventsSchedule,eventsSpeaker,eventsSupportMedia},  
     data() {
         return {
             form: {

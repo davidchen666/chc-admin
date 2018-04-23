@@ -37,7 +37,7 @@
         <el-switch v-model="form.delivery"></el-switch>
       </el-form-item>
       <el-form-item label="会议备注">
-        <el-input type="textarea" autosize placeholder="会议备注" v-model="form.events_remark"  :autosize="{ minRows: 2, maxRows: 4}"> </el-input>
+        <el-input type="textarea" autosize placeholder="会议备注" v-model="form.events_remark" > </el-input>
       </el-form-item>
 
       <!-- <el-form-item label="Activity time">
@@ -171,11 +171,14 @@ export default {
 .line{
   text-align: center;
 }
-.el-range-separator{
+.el-date-editor .el-range-separator{
   width: 10%;
+  padding: 0 0px;
 }
-.el-input,.el-textarea{
-  width: 350px;
+.el-input,.el-textarea,
+.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner 
+{
+  width: 400px;
 }
 </style>
 
