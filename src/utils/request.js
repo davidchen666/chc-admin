@@ -8,7 +8,8 @@ const service = axios.create({
   // baseURL: process.env.BASE_API, // api的base_url
   // baseURL: '/api/', // api的base_url 本地调试
   // baseURL: 'http://localhost/chc-api/index.php', // api的base_url 正式环境
-  baseURL: '../chc-api/', // api的base_url 正式环境
+  baseURL: 'http://www.dxx-tech.top/chc-api/', // api的base_url 正式环境
+  // baseURL: '../chc-api/', // api的base_url 正式环境
   timeout: 15000 // 请求超时时间
 })
 
