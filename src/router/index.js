@@ -37,27 +37,27 @@ export const constantRouterMap = [
     }]
   },
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   redirect: '/example/table',
+  //   name: 'Example',
+  //   meta: { title: 'example', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'table',
+  //       name: 'Table',
+  //       component: () => import('@/views/table/index'),
+  //       meta: { title: 'table', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'tree',
+  //       name: 'Tree',
+  //       component: () => import('@/views/tree/index'),
+  //       meta: { title: 'Tree', icon: 'tree' }
+  //     }
+  //   ]
+  // },
   {
     path: '/events',
     component: Layout,
@@ -98,20 +98,217 @@ export const constantRouterMap = [
     ]
   },
 
+  //酒店管理
   {
-    path: '/form',
+    path: '/hotel',
     component: Layout,
+    redirect: '/hotel/list',
+    name: 'Hotel',
+    meta: { title: '酒店管理', icon: 'example' },
     children: [
       {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        path: 'list',
+        name: 'HotelList',
+        component: () => import('@/views/hotel/index'),
+        meta: { title: '酒店列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'HotelAdd',
+        component: () => import('@/views/hotel/detail'),
+        meta: { title: '添加酒店', icon: 'tree' }
+      },
+      {
+        path: 'detail',
+        name: 'HotelDetail',
+        component: () => import('@/views/hotel/detail'),
+        meta: { title: '酒店详情', icon: 'table' },
+        hidden: true
+      },
+    ]
+  },
+
+  //嘉宾管理
+  {
+    path: '/speaker',
+    component: Layout,
+    redirect: '/speaker/list',
+    name: 'Speaker',
+    meta: { title: '嘉宾管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'SpeakerList',
+        component: () => import('@/views/speaker/index'),
+        meta: { title: '嘉宾列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'SpeakerAdd',
+        component: () => import('@/views/speaker/detail'),
+        meta: { title: '添加嘉宾', icon: 'tree' }
+      },
+      {
+        path: 'detail',
+        name: 'SpeakerDetail',
+        component: () => import('@/views/speaker/detail'),
+        meta: { title: '嘉宾详情', icon: 'table' },
+        hidden: true
+      },
+    ]
+  },
+
+  //媒体管理
+  {
+    path: '/media',
+    component: Layout,
+    redirect: '/media/list',
+    name: 'Media',
+    meta: { title: '媒体管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'MediaList',
+        component: () => import('@/views/media/index'),
+        meta: { title: '媒体列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'MediaAdd',
+        component: () => import('@/views/media/detail'),
+        meta: { title: '添加媒体', icon: 'tree' }
+      },
+      {
+        path: 'detail',
+        name: 'MediaDetail',
+        component: () => import('@/views/media/detail'),
+        meta: { title: '媒体详情', icon: 'table' },
+        hidden: true
+      },
+    ]
+  },
+
+  //会议报名管理
+  {
+    path: '/eventsRegister',
+    component: Layout,
+    redirect: '/eventsRegister/list',
+    name: 'EventsRegister',
+    meta: { title: '会议报名管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'EventsRegisterList',
+        component: () => import('@/views/eventsRegister/index'),
+        meta: { title: '会议报名列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'EventsRegisterAdd',
+        component: () => import('@/views/eventsRegister/detail'),
+        meta: { title: '添加会议报名', icon: 'tree' }
+      },
+      {
+        path: 'detail',
+        name: 'EventsRegisterDetail',
+        component: () => import('@/views/eventsRegister/detail'),
+        meta: { title: '会议报名详情', icon: 'table' },
+        hidden: true
+      },
+    ]
+  },
+
+  //路演项目管理
+  {
+    path: '/roadShow',
+    component: Layout,
+    redirect: '/roadShow/list',
+    name: 'RoadShow',
+    meta: { title: '路演项目管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'RoadShowList',
+        component: () => import('@/views/roadShow/index'),
+        meta: { title: '路演项目列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'RoadShowAdd',
+        component: () => import('@/views/roadShow/detail'),
+        meta: { title: '添加路演项目', icon: 'tree' }
+      },
+      {
+        path: 'detail',
+        name: 'RoadShowDetail',
+        component: () => import('@/views/roadShow/detail'),
+        meta: { title: '路演项目详情', icon: 'table' },
+        hidden: true
+      },
+    ]
+  },
+
+  //新闻管理
+  {
+    path: '/news',
+    component: Layout,
+    redirect: '/news/list',
+    name: 'News',
+    meta: { title: '新闻管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'NewsList',
+        component: () => import('@/views/news/index'),
+        meta: { title: '新闻列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: 'NewsAdd',
+        component: () => import('@/views/news/detail'),
+        meta: { title: '添加新闻', icon: 'tree' }
+      },
+      {
+        path: 'detail',
+        name: 'NewsDetail',
+        component: () => import('@/views/news/detail'),
+        meta: { title: '新闻详情', icon: 'table' },
+        hidden: true
+      },
+    ]
+  },
+
+  //管理员管理
+  {
+    path: '/admin',
+    component: Layout,
+    redirect: '/admin/list',
+    name: 'Admin',
+    meta: { title: '管理员管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: 'AdminList',
+        component: () => import('@/views/admin/index'),
+        meta: { title: '管理员管理', icon: 'table' }
       }
     ]
   },
 
-  // { path: '*', redirect: '/404', hidden: true }
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Form',
+  //       component: () => import('@/views/form/index'),
+  //       meta: { title: 'Form', icon: 'form' }
+  //     }
+  //   ]
+  // },
+
+  { path: '*', redirect: '/404', hidden: true }
 ]
 
 export default new Router({

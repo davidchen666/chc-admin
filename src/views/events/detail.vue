@@ -1,14 +1,17 @@
 <template>
   <div class="app-container">
     <el-tabs type="border-card">
-        <el-tab-pane label="会议信息"><eventsInfo></eventsInfo></el-tab-pane>
-        <el-tab-pane label="关于会议"><eventsAbout></eventsAbout></el-tab-pane>
-        <el-tab-pane label="会议日程"><eventsSchedule></eventsSchedule></el-tab-pane>
-        <el-tab-pane label="会议嘉宾"><eventsSpeaker></eventsSpeaker></el-tab-pane>
-        <el-tab-pane label="支持媒体"><eventsSupportMedia></eventsSupportMedia></el-tab-pane>
-        <el-tab-pane label="历届会议"><eventsPastEvents></eventsPastEvents></el-tab-pane>
-        <el-tab-pane label="会议价格"><eventsCost></eventsCost></el-tab-pane>
-        <el-tab-pane label="路演项目"><eventsRoadShow></eventsRoadShow></el-tab-pane>
+        <el-tab-pane label="会议信息"><eventsInfo @changeShowMenu="changeShowMenu"></eventsInfo></el-tab-pane>
+        <el-tab-pane label="关于会议" :disabled="menuList[1]['isClose']"><eventsAbout></eventsAbout></el-tab-pane>
+        <el-tab-pane label="会议日程" :disabled="menuList[2]['isClose']"><eventsSchedule></eventsSchedule></el-tab-pane>
+        <el-tab-pane label="会议嘉宾" :disabled="menuList[3]['isClose']"><eventsSpeaker></eventsSpeaker></el-tab-pane>
+        <el-tab-pane label="支持媒体" :disabled="menuList[4]['isClose']"><eventsSupportMedia></eventsSupportMedia></el-tab-pane>
+        <el-tab-pane label="历届会议" :disabled="menuList[5]['isClose']"><eventsPastEvents></eventsPastEvents></el-tab-pane>
+        <el-tab-pane label="会议价格" :disabled="menuList[6]['isClose']"><eventsCost></eventsCost></el-tab-pane>
+        <el-tab-pane label="路演项目" :disabled="menuList[7]['isClose']"><eventsRoadShow></eventsRoadShow></el-tab-pane>
+        <!-- <span v-for="val in childrenMenuList" :key="val.menuId">
+          <el-tab-pane :label="val.menuName">{{eventsInfo}}</el-tab-pane>
+        </span> -->
     </el-tabs>
     <!-- <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="Activity name">
@@ -69,29 +72,74 @@ import eventsSupportMedia from './detail/supportMedia.vue'
 export default {
     components: {eventsInfo,eventsAbout,eventsCost,eventsPastEvents,eventsRoadShow,eventsSchedule,eventsSpeaker,eventsSupportMedia},  
     data() {
-        return {
-            form: {
-            name: '',
-            region: '',
-            date1: '',
-            date2: '',
-            delivery: false,
-            type: [],
-            resource: '',
-            desc: ''
+        return { 
+          menuList:[
+            {
+              menuId: '1',
+              menuName: '会议首页',
+              isClose: false,
+            },
+            {
+              menuId: '2',
+              menuName: '关于会议',
+              isClose: true
+            },
+            {
+              menuId: '3',
+              menuName: '会议日程',
+              isClose: true
+            },
+            {
+              menuId: '4',
+              menuName: '演讲嘉宾',
+              isClose: true
+            },
+            {
+              menuId: '5',
+              menuName: '会议酒店',
+              isClose: true
+            },
+            {
+              menuId: '6',
+              menuName: '历届回顾',
+              isClose: true
+            },
+            {
+              menuId: '7',
+              menuName: '会议报名',
+              isClose: true
+            },
+            {
+              menuId: '8',
+              menuName: '路演项目报名',
+              isClose: true
+            },
+          ],
         }
-    }
+  },
+  created(){
+    this.menuList.forEach(items => {
+      items.isClose = false;
+    });
   },
   methods: {
-    onSubmit() {
-      this.$message('submit!')
-    },
-    onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
+    changeShowMenu(mData){
+      this.menuList.forEach(items => {
+        items.isClose = true;
+      });
+      mData.forEach(element => {
+        this.menuList[element-1].isClose = false;
+      });
     }
+    // onSubmit() {
+    //   this.$message('submit!')
+    // },
+    // onCancel() {
+    //   this.$message({
+    //     message: 'cancel!',
+    //     type: 'warning'
+    //   })
+    // }
   }
 }
 </script>

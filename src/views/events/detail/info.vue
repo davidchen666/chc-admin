@@ -22,8 +22,8 @@
         <span> <a> * 如信息有变更，请修改或新增酒店信息</a></span>
       </el-form-item>
       <el-form-item label="导航显示">
-        <el-checkbox-group v-model="form.events_menu">
-          <el-checkbox v-for=" item in childrenMenuList" :key="item.menuId" :label="item.menuName" name="type"></el-checkbox>
+        <el-checkbox-group v-model="form.events_menu" @change="changeMenu">
+          <el-checkbox v-for=" item in childrenMenuList" :key="item.menuId" :label="item.menuId" name="type">{{item.menuName}}</el-checkbox>
           <!-- <el-checkbox label="Promotion activities" name="type"></el-checkbox>
           <el-checkbox label="Offline activities" name="type"></el-checkbox>
           <el-checkbox label="Simple brand exposure" name="type"></el-checkbox> -->
@@ -137,7 +137,7 @@ export default {
             events_name:'',
             events_city:'',
             events_hotel: '',
-            events_menu: '',
+            events_menu: [],
             events_tag: '',
             events_remark: '',
             events_state: false,
@@ -154,6 +154,9 @@ export default {
     }
   },
   methods: {
+    changeMenu(){
+      this.$emit('changeShowMenu',this.form.events_menu);
+    },
     onSubmit() {
       this.$message('submit!')
     },

@@ -11,7 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {  //使用"/api"来代替"http://f.apiplus.c" 
+      '/api': {
         target: 'http://localhost/chc-api/index.php', //源地址 
         changeOrigin: true, //改变源 
         pathRewrite: { 
