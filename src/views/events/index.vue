@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { getList } from '@/api/fetch'
+import { getEventsList } from '@/api/fetch'
 
 export default {
   data() {
@@ -128,7 +128,7 @@ export default {
       this.listLoading = true
       this.listQuery.currentPage = this.currentPage;
       this.listQuery.pageSize = this.pageSize;
-      getList(this.listQuery).then(response => {
+      getEventsList(this.listQuery).then(response => {
         this.list = response.resData.items
         this.totalData = parseInt(response.resData.page.total)
         this.listLoading = false
