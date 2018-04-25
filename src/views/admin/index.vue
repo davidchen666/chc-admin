@@ -2,10 +2,10 @@
   <div class="app-container">
     <div style="margin-bottom:20px;">
       <el-row>
-        <el-col :span="6"><el-input placeholder="输入关键字，按回车键字搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData"/></el-col>
+        <el-col :span="6"><el-input placeholder="输入关键字，按回车键字搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData(currentPage = 1)"/></el-col>
         <!-- <el-col :span="2"> 11</el-col> -->
         <el-col :span="4">
-          <el-select v-model="listQuery.status" placeholder="会议状态" @change="fetchData">
+          <el-select v-model="listQuery.status" placeholder="管理员状态" @change="fetchData(currentPage = 1)">
             <el-option
               v-for="item in userStatus"
               :key="item.value"
@@ -14,7 +14,7 @@
             </el-option>
           </el-select>
         </el-col>
-        <el-col :span="3"><el-button icon="el-icon-search" @click="fetchData">搜索</el-button></el-col>
+        <el-col :span="3"><el-button icon="el-icon-search" @click="fetchData(currentPage = 1)">搜索</el-button></el-col>
         <el-col :span="6"><el-button type="success" @click="showDialog('add',null)"> 添加管理员</el-button></el-col>
       </el-row>
     </div>
@@ -67,8 +67,6 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="编辑" >
         <template slot-scope="scope">
-          <!-- <i class="el-icon-edit">修改</i> -->
-          <!-- <i class="el-icon-edit">重置密码</i> -->
           <el-tooltip class="item" effect="dark" content="编辑信息" placement="top">
             <el-button type="primary" icon="el-icon-edit-outline" circle size='mini' @click="showDialog('edit',scope.row)"></el-button>
           </el-tooltip>
@@ -108,6 +106,15 @@
         <span v-show="showType === 'add'">
           <el-form-item label="密码" :label-width="formLabelWidth">
             <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
+          </el-form-item>
+        </span>
+        <span v-show="showType === 'edit'">
+          <el-form-item label="账号状态" :label-width="formLabelWidth">
+            <el-select v-model="form.state" placeholder="管理员状态">
+              <span v-for="item in userStatus" :key="item.value" v-if="item.value">
+                <el-option :label="item.label" :value="item.value"></el-option>
+              </span>
+            </el-select>
           </el-form-item>
         </span>
         <el-form-item label="姓名" :label-width="formLabelWidth">
@@ -166,6 +173,7 @@ export default {
       form: {
         username: '',
         password: '',
+        state: '',
         realname: '',
         mobile: '',
         email: '',
@@ -222,6 +230,7 @@ export default {
           userid: dData.user_id,
           username: dData.user_name,
           password: '',
+          state: dData.user_state,
           realname: dData.user_realname,
           mobile: dData.user_mobile,
           email: dData.user_mail,
@@ -232,6 +241,7 @@ export default {
           userid: '',
           username: '',
           password: '',
+          state: '',
           realname: '',
           mobile: '',
           email: '',
@@ -242,7 +252,7 @@ export default {
     },
     //保存信息；1----添加管理员；2----修改信息
     saveInfo(){
-      console.log(this.form);
+      // console.log(this.form);
       this.beginLoad();
       //添加用戶
       if(this.showType === 'add'){
@@ -286,15 +296,42 @@ export default {
     },
     //刪除管理員
     delAdmin(dData){
-
+      this.$confirm('此操作将删除用户('+ dData.user_name +'), 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.beginLoad();
+        let params = {
+          userid: dData.user_id,
+          username: dData.user_name,
+        }
+        delAdmin(params).then(response => {
+          if(response && response.resCode === 200 && response.resData){
+            this.$message({
+              message: '删除成功！',
+              type: 'success'
+            });
+            this.dialogFormVisible = false;
+            this.fetchData();
+            this.allLoading.close();
+          }else{
+            this.allLoading.close();
+          }
+        }).catch(() => {
+          this.allLoading.close();
+        })     
+      }).catch(() => {
+              
+      });
     },
     //重置密碼
     resetPwd(dData){
-      this.$prompt('请输入新密碼', '提示', {
+      this.$prompt('请输入新密码', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /^[0-9A-Za-z_]{6,15}$/,
-          inputErrorMessage: '密码格式不正确（至少6位）'
+          inputErrorMessage: '密码格式不正确（6-15位）'
         }).then(({ value }) => {
           this.beginLoad();
           let params = {
@@ -303,27 +340,18 @@ export default {
             password: value,
           }
           editAdminPwd(params).then(response => {
-            console.log(response);
             if(response && response.resCode === 200 && response.resData){
               this.allLoading.close();
               this.$message({
-                message: '密碼重置成功',
+                message: '密码重置成功',
                 type: 'success'
               });
               this.dialogFormVisible = false;
-              this.fetchData();
             }else{
               this.allLoading.close();
             }
-          // this.$message({
-          //   type: 'success',
-          //   message: '你的邮箱是: ' + value
-          // });
           }).catch(() => {
-          // this.$message({
-          //   type: 'info',
-          //   message: '取消输入'
-          // });  
+            this.allLoading.close();
           })     
         });
     }
