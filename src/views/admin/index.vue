@@ -15,27 +15,27 @@
           </el-select>
         </el-col>
         <el-col :span="3"><el-button icon="el-icon-search" @click="fetchData">搜索</el-button></el-col>
-        <el-col :span="6"><el-button type="success" @click="dialogFormVisible = true"> 添加管理员</el-button></el-col>
+        <el-col :span="6"><el-button type="success" @click="showDialog('add',null)"> 添加管理员</el-button></el-col>
       </el-row>
     </div>
     
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-      <el-table-column align="center" label='管理员ID' width="95">
+      <el-table-column align="center" label='ID' width="95">
         <template slot-scope="scope">
           {{scope.row.user_id}}
         </template>
       </el-table-column>
-      <el-table-column label="管理员账号">
+      <el-table-column label="账号" width="100" align="center">
         <template slot-scope="scope">
           {{scope.row.user_name}}
         </template>
       </el-table-column>
-      <el-table-column label="管理员姓名" width="200" align="center">
+      <el-table-column label="姓名" width="100" align="center">
         <template slot-scope="scope">
           <span>{{scope.row.user_realname}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机" width="200" align="center">
+      <el-table-column label="手机" width="120" align="center">
         <template slot-scope="scope">
           {{scope.row.user_mobile}}
         </template>
@@ -45,7 +45,7 @@
           {{scope.row.user_mail}}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="账号状态" width="200" align="center" >
+      <el-table-column class-name="status-col" label="账号状态" width="100" align="center" >
         <template slot-scope="scope">
           <el-tag :type="scope.row.user_state | statusFilter">
             <span v-if="scope.row.user_state == '1'" >正常 </span>
@@ -53,21 +53,31 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
+      <el-table-column align="center" prop="created_at" label="创建时间" width="180">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span>{{scope.row.c_date}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="更新时间" width="200">
+      <el-table-column align="center" prop="created_at" label="更新时间" width="180">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span>{{scope.row.u_date}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="编辑" width="200">
+      <el-table-column align="center" prop="created_at" label="编辑" >
         <template slot-scope="scope">
-          <router-link :to="'detail?id=' + scope.row.user_id"><i class="el-icon-edit"></i></router-link>
+          <!-- <i class="el-icon-edit">修改</i> -->
+          <!-- <i class="el-icon-edit">重置密码</i> -->
+          <el-tooltip class="item" effect="dark" content="编辑信息" placement="top">
+            <el-button type="primary" icon="el-icon-edit-outline" circle size='mini' @click="showDialog('edit',scope.row)"></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="重置密码" placement="top">
+            <el-button type="warning" icon="el-icon-edit" circle size='mini' @click="resetPwd(scope.row)"></el-button>
+          </el-tooltip>
+          <el-tooltip class="item" effect="dark" content="删除管理员" placement="top">
+            <el-button type="danger" icon="el-icon-delete" circle size='mini'  @click="delAdmin(scope.row)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>
@@ -84,14 +94,22 @@
     </div>
 
     <!-- 对话框 -->
-    <el-dialog title="添加管理员" :visible.sync="dialogFormVisible">
+    <el-dialog :title="showType==='add'?'添加管理员':'修改管理员'" :visible.sync="dialogFormVisible">
       <el-form :model="form">
+        <!-- 修改时显示id -->
+        <span v-show="showType==='edit'">
+          <el-form-item label="管理员ID" :label-width="formLabelWidth">
+            <el-input  v-model="form.userid" :disabled="showType==='edit'"></el-input>
+          </el-form-item>
+        </span>
         <el-form-item label="账号" :label-width="formLabelWidth">
-          <el-input v-model="form.username" auto-complete="off"></el-input>
+          <el-input auto-complete="off" v-model="form.username" :disabled="showType==='edit'"></el-input>
         </el-form-item>
-        <el-form-item label="密码" :label-width="formLabelWidth">
-          <el-input v-model="form.password" auto-complete="off"></el-input>
-        </el-form-item>
+        <span v-show="showType === 'add'">
+          <el-form-item label="密码" :label-width="formLabelWidth">
+            <el-input type="password" v-model="form.password" auto-complete="off"></el-input>
+          </el-form-item>
+        </span>
         <el-form-item label="姓名" :label-width="formLabelWidth">
           <el-input v-model="form.realname" auto-complete="off"></el-input>
         </el-form-item>
@@ -115,7 +133,7 @@
 </template>
 
 <script>
-import { getAdminList } from '@/api/fetch'
+import { getAdminList, addAdmin, editAdmin, editAdminPwd, delAdmin } from '@/api/fetch'
 
 export default {
   data() {
@@ -141,8 +159,10 @@ export default {
           value: '-1',
           label: '冻结'
         }],
+      showType: null,
       dialogFormVisible: false,
       formLabelWidth: '120px',
+      allLoading: '',
       form: {
         username: '',
         password: '',
@@ -164,9 +184,10 @@ export default {
     }
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
+    //加载表格
     fetchData() {
       this.listLoading = true
       this.listQuery.currentPage = this.currentPage;
@@ -185,9 +206,126 @@ export default {
       this.currentPage = val;
       this.fetchData();
     },
+    beginLoad(){
+      this.allLoading = this.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+    },
+    showDialog(type,dData){
+      this.showType = type;
+    //   console.log(type,dData);
+      if(this.showType === 'edit'){
+        this.form = {
+          userid: dData.user_id,
+          username: dData.user_name,
+          password: '',
+          realname: dData.user_realname,
+          mobile: dData.user_mobile,
+          email: dData.user_mail,
+          remark: dData.user_remark
+        };
+      }else if(this.showType === 'add'){
+        this.form = {
+          userid: '',
+          username: '',
+          password: '',
+          realname: '',
+          mobile: '',
+          email: '',
+          remark: ''
+        };
+      }
+      this.dialogFormVisible = true;
+    },
+    //保存信息；1----添加管理员；2----修改信息
     saveInfo(){
       console.log(this.form);
-      this.dialogFormVisible = false;
+      this.beginLoad();
+      //添加用戶
+      if(this.showType === 'add'){
+          addAdmin(this.form).then(response => {
+            // console.log(response);
+            if(response && response.resCode === 200 && response.resData){
+              this.allLoading.close();
+              this.$message({
+                message: '添加成功',
+                type: 'success'
+              });
+              this.dialogFormVisible = false;
+              this.fetchData();
+            }else{
+              this.allLoading.close();
+            }
+          // this.list = response.resData.items
+          // this.dialogFormVisible = false;
+        })
+      }
+      //編輯用戶
+      if(this.showType === 'edit'){
+          editAdmin(this.form).then(response => {
+            // console.log(response);
+            if(response && response.resCode === 200 && response.resData){
+              this.allLoading.close();
+              this.$message({
+                message: '修改成功',
+                type: 'success'
+              });
+              this.dialogFormVisible = false;
+              this.fetchData();
+            }else{
+              this.allLoading.close();
+            }
+          // this.list = response.resData.items
+          // this.dialogFormVisible = false;
+        })
+      }
+      
+    },
+    //刪除管理員
+    delAdmin(dData){
+
+    },
+    //重置密碼
+    resetPwd(dData){
+      this.$prompt('请输入新密碼', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputPattern: /^[0-9A-Za-z_]{6,15}$/,
+          inputErrorMessage: '密码格式不正确（至少6位）'
+        }).then(({ value }) => {
+          this.beginLoad();
+          let params = {
+            userid: dData.user_id,
+            username: dData.user_name,
+            password: value,
+          }
+          editAdminPwd(params).then(response => {
+            console.log(response);
+            if(response && response.resCode === 200 && response.resData){
+              this.allLoading.close();
+              this.$message({
+                message: '密碼重置成功',
+                type: 'success'
+              });
+              this.dialogFormVisible = false;
+              this.fetchData();
+            }else{
+              this.allLoading.close();
+            }
+          // this.$message({
+          //   type: 'success',
+          //   message: '你的邮箱是: ' + value
+          // });
+          }).catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '取消输入'
+          // });  
+          })     
+        });
     }
   }
 }
