@@ -23,7 +23,7 @@
       </el-form-item>
       <el-form-item label="导航显示">
         <el-checkbox-group v-model="form.events_menu" @change="changeMenu">
-          <el-checkbox v-for=" item in childrenMenuList" :key="item.menuId" :label="item.menuId" name="type">{{item.menuName}}</el-checkbox>
+          <el-checkbox v-for="item in childrenMenuList" :key="item.menuId" :label="item.menuId" name="type">{{item.menuName}}</el-checkbox>
           <!-- <el-checkbox label="Promotion activities" name="type"></el-checkbox>
           <el-checkbox label="Offline activities" name="type"></el-checkbox>
           <el-checkbox label="Simple brand exposure" name="type"></el-checkbox> -->

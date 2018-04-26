@@ -3,7 +3,6 @@
         <el-form ref="form" :model="form" label-width="120px">
             <el-form-item label="会议日程标题">
                 <el-input placeholder="请输入会议日程标题" v-model="form.schedule_title"> </el-input>
-                <!-- <el-input v-model="form.about_contents" placeholder="请输入关于会议内容"></el-input> -->
             </el-form-item>
             <el-form-item label="会议日程内容">
                 <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.schedule_contents"> </el-input>

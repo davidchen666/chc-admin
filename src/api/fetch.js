@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 
+//========================= events =========================
 //会议列表
 export function getEventsList(params) {
   return request({
@@ -8,6 +9,40 @@ export function getEventsList(params) {
     data: params
   })
 }
+//========================= hotel =========================
+//酒店列表
+export function getHotelList(params) {
+  return request({
+    url: '?m=hotel&a=getHotelList',
+    method: 'post',
+    data: params
+  })
+}
+//添加酒店
+export function addHotel(params) {
+  return request({
+    url: '?m=hotel&a=addHotel',
+    method: 'post',
+    data: params
+  })
+}
+//编辑酒店
+export function editHotel(params) {
+  return request({
+    url: '?m=hotel&a=editHotel',
+    method: 'post',
+    data: params
+  })
+}
+//更改状态
+export function editHotelState(params) {
+  return request({
+    url: '?m=hotel&a=editHotelState',
+    method: 'post',
+    data: params
+  })
+}
+//========================= admin =========================
 
 //管理员列表
 export function getAdminList(params) {
@@ -34,7 +69,6 @@ export function editAdmin(params) {
   })
 }
 //重置管理员密码
-
 export function editAdminPwd(params) {
   return request({
     url: '?m=admin&a=editAdminPwd',
