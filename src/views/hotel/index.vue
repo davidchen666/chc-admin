@@ -56,7 +56,8 @@
       <el-table-column align="center" prop="created_at" label="编辑" >
         <template slot-scope="scope">
           <el-tooltip class="item" effect="dark" content="编辑信息" placement="top">
-            <router-link :to="'detail?id=' + scope.row.hotel_id">
+            <!-- <router-link :to="'detail?id=' + scope.row.hotel_id"> -->
+            <router-link :to="{name:'HotelDetail',query:{hotel_id:scope.row.hotel_id}}">
               <el-button type="primary" icon="el-icon-edit-outline" circle size='mini'></el-button>
             </router-link>
           </el-tooltip>
