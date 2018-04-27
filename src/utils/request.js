@@ -10,7 +10,7 @@ const service = axios.create({
   // baseURL: 'http://localhost/chc-api/index.php', // api的base_url 正式环境
   // baseURL: 'http://www.dxx-tech.top/chc-api/', // api的base_url 正式环境
   // baseURL: '../chc-api/', // api的base_url 正式环境
-  timeout: 15000 // 请求超时时间
+  timeout: 25000 // 请求超时时间
 })
 
 // request拦截器

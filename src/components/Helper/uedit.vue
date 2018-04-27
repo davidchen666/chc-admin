@@ -36,6 +36,9 @@
       },
       getUEContentTxt() { // 获取纯文本内容方法
         return this.editor.getContentTxt()
+      },
+      setUEContent(data) { //写入内容
+        return this.editor.setContent(data)
       }
     },
     destroyed() {

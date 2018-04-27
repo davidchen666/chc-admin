@@ -41,8 +41,8 @@
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
-    <button @click="getUEContent()">获取内容</button>
-    <button @click="getUEContentTxt()">获取无文本内容</button>
+    <!-- <button @click="getUEContent()">获取内容</button>
+    <button @click="getUEContentTxt()">获取无文本内容</button> -->
   </div>
 </template>
 
@@ -120,6 +120,7 @@ export default {
         // console.log(response);
         if(response.resCode === 200){
           this.form =  response.resData.items[0];
+          console.log('获取到form--',this.form);
           // let picData = self.form.hotel_pic;
           // console.log(picData);
           this.form.hotel_pic = JSON.parse(this.form.hotel_pic);
@@ -133,7 +134,9 @@ export default {
             name: this.form.arrive_pic,
             url: process.env.BASE_TOTAL_API + 'uploads/hotel/' + this.form.arrive_pic
           }];
-          console.log('arrivePicList',this.arrivePicList);
+          this.setUEContent(this.hotelInfo,this.form.hotel_info);
+          this.setUEContent(this.arriveInfo,this.form.arrive_info);
+          // console.log('arrivePicList',this.arrivePicList);
         }
       })
     },
@@ -142,7 +145,7 @@ export default {
       this.reloadHotelPic(fileList);
     },
     handleHotelPictureCardPreview(file) {
-      // console.log(file)
+      console.log(file)
       // this.dialogImageUrl = file.url;
       // let fileName = file.response && file.response.resData ? file.response.resData.newname : file.name;
       this.dialogImageUrl = process.env.BASE_TOTAL_API + 'uploads/hotel/' + file.name;
@@ -150,7 +153,7 @@ export default {
       this.dialogVisible = true;
     },
     hotelPicSuccess(response, file, fileList){
-      // console.log(response, file, fileList);
+      console.log(response, file, fileList);
       if(response.resCode === 400){
         fileList.pop();
         this.$message({
@@ -159,9 +162,11 @@ export default {
         })
       }else{
         file.name = response.resData.newname;
+        this.reloadHotelPic(fileList);
+        console.log(response, file, fileList);
       }
-      // console.log(response, file, fileList);
-      this.reloadHotelPic(fileList);
+      
+      
     },
     overHotelPicLimit(files, fileList){
       this.$message({
@@ -178,14 +183,14 @@ export default {
     },
     //重新计算hotelpic
     reloadHotelPic(fileList){
-      if(this.form.hotel_pic.length !== fileList.length){
+      // if(this.form.hotel_pic.length !== fileList.length){
         this.form.hotel_pic = [];
         fileList.forEach(element => {
           // if(element.response && element.response.resData){
             this.form.hotel_pic.push(element.name);
           // }
         });
-      }
+      // }
       console.log(this.form.hotel_pic);
     },
     //=========arrive=====
@@ -248,6 +253,11 @@ export default {
         type: 'success'
       });
       console.log(content)
+    },
+    setUEContent(name,content) {
+      // let content = this.$refs.ue.getUEContent(); // 调用子组件方法
+      // let content = this.$refs[name].setUEContent(); // 调用子组件方法
+      return this.$refs[name].setUEContent(content);
     },
     beginLoad(){
       this.allLoading = this.$loading({
