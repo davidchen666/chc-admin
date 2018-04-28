@@ -1,10 +1,10 @@
 <template>
-  <div class="app-container">
-    <el-form ref="form" :model="form" label-width="120px" v-loading.body="listLoading">
+  <div class="app-container" v-loading.body="listLoading">
+    <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="酒店名称">
         <el-input v-model="form.hotel_name" placeholder="酒店名称"></el-input>
       </el-form-item>
-      <el-form-item label="是否上线">
+      <el-form-item label="是否上线"  v-loading.body="listLoading" element-loading-text="加载中">
         <el-radio v-model="form.hotel_state" label="1">上线</el-radio>
         <el-radio v-model="form.hotel_state" label="-1">不上线</el-radio>
       </el-form-item>
@@ -38,7 +38,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
-        <el-button @click="onCancel">取消</el-button>
+        <el-button @click="onCancel">返回</el-button>
       </el-form-item>
     </el-form>
     <!-- <button @click="getUEContent()">获取内容</button>
@@ -83,44 +83,61 @@ export default {
       },
       hotelInfo: "hotelInfo", // 不同编辑器必须不同的id
       arriveInfo: "arriveInfo", // 不同编辑器必须不同的id
-      // hotelDefaultMsg: '', //默认值
-      // arriveDefaultMsg: '',
     }
   },
   created(){
     // console.log(process.env);
     //上传地址
     this.uploadUrl = process.env.BASE_API + '?m=hotel&a=uploadFile';
-    this.currentRouter = this.$route.name;
-    console.log(this.$route)
-    //编辑页面,验证参数
-    if(this.currentRouter === 'HotelDetail'){
-      //将数据渲染到页面
-      if(this.$route.query.hotel_id){
-        // this.form = this.$route.query;
-        this.getDetail(this.$route.query.hotel_id);
-        // this.form.hotel_pic = JSON.parse(this.form.hotel_pic);
-      }else{
-        this.$message({
-          showClose: true,
-          message: '访问的地址不正确,正在返回...',
-          type: 'error'
-        });
-        history.go(-1);
-        return;
-      }
-    }
+    this.init();
+  },
+  watch: {
+    "$route.name": "init"
   },
   methods: {
+    //初始化
+    init(){
+      this.currentRouter = this.$route.name;
+      //编辑页面,验证参数
+      if(this.currentRouter === 'HotelDetail'){
+        //将数据渲染到页面
+        if(this.$route.query.hotel_id){
+          // this.form = this.$route.query;
+          this.getDetail(this.$route.query.hotel_id);
+          // this.form.hotel_pic = JSON.parse(this.form.hotel_pic);
+        }else{
+          this.$message({
+            showClose: true,
+            message: '访问的地址不正确,正在返回...',
+            type: 'error'
+          });
+          history.go(-1);
+          return;
+        }
+      }else{ //置空
+        this.hotelPicList = this.arrivePicList = [];
+        this.form = {
+          hotel_name: '',
+          hotel_state: '1',
+          hotel_remark: '',
+          hotel_info: '',
+          arrive_info: '',
+          hotel_pic: [],
+          arrive_pic: ''
+        };
+        this.setUEContent(this.hotelInfo,this.form.hotel_info);
+        this.setUEContent(this.arriveInfo,this.form.arrive_info);
+      }
+    },
     getDetail(hotel_id) {
       // const self = this;
-      // this.listLoading = true
+      this.listLoading = true
       getHotelList({hotelid: hotel_id}).then(response => {
         this.listLoading = false
         // console.log(response);
         if(response.resCode === 200){
           this.form =  response.resData.items[0];
-          console.log('获取到form--',this.form);
+          // console.log('获取到form--',this.form);
           // let picData = self.form.hotel_pic;
           // console.log(picData);
           this.form.hotel_pic = JSON.parse(this.form.hotel_pic);
@@ -130,10 +147,12 @@ export default {
               url: process.env.BASE_TOTAL_API + 'uploads/hotel/' + element
             }) 
           });
-          this.arrivePicList=[{
-            name: this.form.arrive_pic,
-            url: process.env.BASE_TOTAL_API + 'uploads/hotel/' + this.form.arrive_pic
-          }];
+          if(this.form.arrive_pic){
+            this.arrivePicList=[{
+              name: this.form.arrive_pic,
+              url: process.env.BASE_TOTAL_API + 'uploads/hotel/' + this.form.arrive_pic
+            }];
+          }
           this.setUEContent(this.hotelInfo,this.form.hotel_info);
           this.setUEContent(this.arriveInfo,this.form.arrive_info);
           // console.log('arrivePicList',this.arrivePicList);
@@ -153,7 +172,7 @@ export default {
       this.dialogVisible = true;
     },
     hotelPicSuccess(response, file, fileList){
-      console.log(response, file, fileList);
+      // console.log(response, file, fileList);
       if(response.resCode === 400){
         fileList.pop();
         this.$message({
@@ -163,7 +182,7 @@ export default {
       }else{
         file.name = response.resData.newname;
         this.reloadHotelPic(fileList);
-        console.log(response, file, fileList);
+        // console.log(response, file, fileList);
       }
       
       
@@ -262,7 +281,7 @@ export default {
     beginLoad(){
       this.allLoading = this.$loading({
         lock: true,
-        text: 'Loading',
+        text: '请求中，请稍等...',
         spinner: 'el-icon-loading',
         background: 'rgba(0, 0, 0, 0.7)'
       });
@@ -306,10 +325,7 @@ export default {
       // this.$message('submit!')
     },
     onCancel() {
-      this.$message({
-        message: 'cancel!',
-        type: 'warning'
-      })
+      history.go(-1);
     }
   }
 }

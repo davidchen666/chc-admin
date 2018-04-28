@@ -117,16 +117,7 @@ export default {
       showType: null,
       dialogFormVisible: false,
       formLabelWidth: '120px',
-      allLoading: '',
-      // form: {
-      //   username: '',
-      //   password: '',
-      //   state: '',
-      //   realname: '',
-      //   mobile: '',
-      //   email: '',
-      //   remark: ''
-      // }
+      allLoading: ''
     }
   },
   filters: {
