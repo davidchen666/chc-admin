@@ -202,19 +202,19 @@ export const constantRouterMap = [
         component: () => import('@/views/eventsRegister/index'),
         meta: { title: '会议报名列表', icon: 'table' }
       },
-      {
-        path: 'add',
-        name: 'EventsRegisterAdd',
-        component: () => import('@/views/eventsRegister/detail'),
-        meta: { title: '添加会议报名', icon: 'tree' }
-      },
-      {
-        path: 'detail',
-        name: 'EventsRegisterDetail',
-        component: () => import('@/views/eventsRegister/detail'),
-        meta: { title: '会议报名详情', icon: 'table' },
-        hidden: true
-      },
+      // {
+      //   path: 'add',
+      //   name: 'EventsRegisterAdd',
+      //   component: () => import('@/views/eventsRegister/detail'),
+      //   meta: { title: '添加会议报名', icon: 'tree' }
+      // },
+      // {
+      //   path: 'detail',
+      //   name: 'EventsRegisterDetail',
+      //   component: () => import('@/views/eventsRegister/detail'),
+      //   meta: { title: '会议报名详情', icon: 'table' },
+      //   hidden: true
+      // },
     ]
   },
 
@@ -244,6 +244,12 @@ export const constantRouterMap = [
         component: () => import('@/views/roadShow/detail'),
         meta: { title: '路演项目详情', icon: 'table' },
         hidden: true
+      },
+      {
+        path: 'registerList',
+        name: 'RoadShowRegisterList',
+        component: () => import('@/views/roadShow/registerList'),
+        meta: { title: '路演报名列表', icon: 'table' }
       },
     ]
   },

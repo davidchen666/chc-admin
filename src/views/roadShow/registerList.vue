@@ -4,75 +4,83 @@
       <el-row>
         <el-col :span="6"><el-input placeholder="输入关键字，按回车键搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData(currentPage = 1)"/></el-col>
         <el-col :span="4">
-          <el-select v-model="listQuery.status" placeholder="状态" @change="fetchData(currentPage = 1)">
-            <el-option
-              v-for="item in userStatus"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
+          <el-select v-model="listQuery.events_id" placeholder="请选择会议" @change="fetchData(currentPage = 1)">
+            <span v-for="item in eventsList" :key="item.events_id">
+              <el-option :label="item.events_name" :value="item.events_id"></el-option>
+            </span>
           </el-select>
         </el-col>
         <el-col :span="3"><el-button icon="el-icon-search" @click="fetchData(currentPage = 1)">搜索</el-button></el-col>
         <el-col :span="6">
           <router-link to="add">
-            <el-button type="success"> 添加媒体</el-button>
+            <!-- <el-button type="success"> 下载excel</el-button> -->
           </router-link>
         </el-col>
       </el-row>
     </div>
-    
+    <!-- id    com_name    user_name   user_job    user_mobile user_email  file_name   road_id remark  create_date update_date -->
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="Loading" border fit highlight-current-row>
-      <el-table-column align="center" label='ID' width="95">
+      <el-table-column align="center" label='报名ID' width="95">
         <template slot-scope="scope">
-          {{scope.row.media_id}}
+          {{scope.row.id}}
         </template>
       </el-table-column>
-      <el-table-column label="媒体名称" align="center">
+      <el-table-column label="公司名称" align="center">
         <template slot-scope="scope">
-          {{scope.row.media_name}}
+          {{scope.row.com_name}}
         </template>
       </el-table-column>
-      <el-table-column label="所属公司" align="center">
+      <el-table-column label="联系人姓名" align="center">
         <template slot-scope="scope">
-          {{scope.row.media_company}}
+          {{scope.row.user_name}}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="媒体状态" width="100" align="center" >
+      <el-table-column label="职务" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.media_state | statusFilter">
-            <span v-if="scope.row.media_state == '1'" >上线 </span>
-            <span v-if="scope.row.media_state == '-1'" >下线 </span>
-          </el-tag>
+          {{scope.row.user_job}}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="创建时间" width="180">
+      <el-table-column label="电话/手机" align="center">
+        <template slot-scope="scope">
+          {{scope.row.user_mobile}}
+        </template>
+      </el-table-column>
+      <el-table-column label="邮箱" align="center">
+        <template slot-scope="scope">
+          {{scope.row.user_email}}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="created_at" label="报名时间" width="180">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span>{{scope.row.create_date}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="更新时间" width="180">
+      <!-- <el-table-column align="center" prop="created_at" label="更新时间" width="180">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span>{{scope.row.update_date}}</span>
         </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="编辑" >
+      </el-table-column> -->
+      <el-table-column align="center" prop="created_at" label="下载计划书" >
         <template slot-scope="scope">
-          <el-tooltip class="item" effect="dark" content="编辑信息" placement="top">
-            <router-link :to="{name:'MediaDetail',query:{media_id:scope.row.media_id}}">
-              <el-button type="primary" icon="el-icon-edit-outline" circle size='mini'></el-button>
-            </router-link>
+          <el-tooltip class="item" effect="dark" content="下载计划书" placement="top">
+            <!-- file_name -->
+            <a :href="downUrl + scope.row.file_name">
+              <el-button type="primary" icon="el-icon-download" circle size='mini'></el-button>
+            </a>
+            <!-- <router-link :to="{name:'MediaDetail',query:{media_id:scope.row.media_id}}"> -->
+              <!-- <el-button type="primary" icon="el-icon-edit-outline" circle size='mini' @click="dialogFormVisible = true, form=scope.row"></el-button> -->
+            <!-- </router-link> -->
           </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="更改状态" placement="top">
+          <!-- <el-tooltip class="item" effect="dark" content="更改状态" placement="top">
             <span v-if="scope.row.media_state == '1'">
               <el-button type="warning" icon="el-icon-arrow-down" circle size='mini' @click="changeState(scope.row,'-1')"></el-button>
             </span>
             <span v-if="scope.row.media_state == '-1'">
               <el-button type="warning" icon="el-icon-arrow-up" circle size='mini' @click="changeState(scope.row,'1')"></el-button>
             </span>
-          </el-tooltip>
+          </el-tooltip> -->
         </template>
       </el-table-column>
     </el-table>
@@ -87,12 +95,11 @@
         :total="totalData">
       </el-pagination>
     </div>
-      
   </div>
 </template>
 
 <script>
-import { getMediaList, editMediaState } from '@/api/fetch'
+import { getRoadShowRegisterList, getEventsList } from '@/api/fetch'
 
 export default {
   data() {
@@ -101,27 +108,29 @@ export default {
       listLoading: true,
       listQuery:{
         searchVal: '',
-        status: ''
+        events_id: ''
       },
       currentPage: 1,
       pageSize: 10,
       totalData: 0,
-      userStatus: [
-        {
-          value: '',
-          label: '全部'
-        },
-        {
-          value: '1',
-          label: '上线'
-        }, {
-          value: '-1',
-          label: '下线'
-        }],
+      eventsList: [],
       showType: null,
-      dialogFormVisible: false,
       formLabelWidth: '120px',
-      allLoading: ''
+      allLoading: '',
+      downUrl: '',
+      inputState: true,
+      // id    com_name    user_name   user_job    user_mobile user_email  file_name   road_id remark  create_date update_date
+      form:{
+        id: '',
+        com_name: '',
+        user_name: '',
+        user_job: '',
+        user_mobile: '',
+        user_email: '',
+        file_name: '',
+        events_id: '',
+        remark: ''
+      }
     }
   },
   filters: {
@@ -135,15 +144,27 @@ export default {
     }
   },
   created() {
+    this.downUrl = process.env.BASE_TOTAL_API + 'uploads/roadShow/';
+    this.fetchEventsList();
     this.fetchData();
   },
   methods: {
+    //加载会议列表
+    fetchEventsList(){
+      let params = {
+        currentPage: 1,
+        pageSize: 100,
+      };
+      getEventsList(params).then(response => {
+        this.eventsList = response.resData.items
+      })
+    },
     //加载表格
     fetchData() {
       this.listLoading = true
       this.listQuery.currentPage = this.currentPage;
       this.listQuery.pageSize = this.pageSize;
-      getMediaList(this.listQuery).then(response => {
+      getRoadShowRegisterList(this.listQuery).then(response => {
         this.list = response.resData.items
         this.totalData = parseInt(response.resData.page.total)
         this.listLoading = false
@@ -156,45 +177,6 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       this.fetchData();
-    },
-    beginLoad(){
-      this.allLoading = this.$loading({
-        lock: true,
-        text: '请稍等,请求中...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      });
-    },
-    //更改状态
-    changeState(dData,needState){
-      let stateStr = dData.media_state == '1'? ' 设置为下线状态，将在会议设置中不显示该媒体':' 设置为上线状态，将在会议设置中显示该媒体';
-      this.$confirm('此操作将把'+ dData.media_name + stateStr +', 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.beginLoad();
-        let params = {
-          mediaid: dData.media_id,
-          state: needState
-        }
-        editMediaState(params).then(response => {
-          if(response && response.resCode === 200 && response.resData){
-            this.$message({
-              message: '状态修改成功。',
-              type: 'success'
-            });
-            this.fetchData();
-            this.allLoading.close();
-          }else{
-            this.allLoading.close();
-          }
-        }).catch(() => {
-          this.allLoading.close();
-        })     
-      }).catch(() => {
-              
-      });
     },
   }
 }

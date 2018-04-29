@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-bottom:20px;">
       <el-row>
-        <el-col :span="6"><el-input placeholder="输入关键字，按回车键字搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData"/></el-col>
+        <el-col :span="6"><el-input placeholder="输入关键字，按回车键搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData"/></el-col>
         <!-- <el-col :span="2"> 11</el-col> -->
         <el-col :span="4">
           <el-select v-model="listQuery.eventStatus" placeholder="会议状态" @change="fetchData">
@@ -57,7 +57,7 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
         <template slot-scope="scope">
-          <span>{{scope.row.c_date}}</span>
+          <span>{{scope.row.create_date}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="查看" width="200">

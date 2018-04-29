@@ -17,6 +17,14 @@ export function getEventsRegisterList(params) {
     data: params
   })
 }
+//更改会议报名信息-> 报名费用，发票状态，付费渠道，备注信息 
+export function editEventsRegister(params) {
+  return request({
+    url: '?m=events&a=editEventsRegister',
+    method: 'post',
+    data: params
+  })
+}
 
 //========================= hotel =========================
 //酒店列表
@@ -115,6 +123,49 @@ export function editMedia(params) {
 export function editMediaState(params) {
   return request({
     url: '?m=media&a=editMediaState',
+    method: 'post',
+    data: params
+  })
+}
+
+//========================= road show =========================
+//路演列表
+export function getRoadShowList(params) {
+  return request({
+    url: '?m=roadShow&a=getRoadShowList',
+    method: 'post',
+    data: params
+  })
+}
+//添加路演
+export function addRoadShow(params) {
+  return request({
+    url: '?m=roadShow&a=addRoadShow',
+    method: 'post',
+    data: params
+  })
+}
+//编辑路演
+export function editRoadShow(params) {
+  return request({
+    url: '?m=roadShow&a=editRoadShow',
+    method: 'post',
+    data: params
+  })
+}
+//更改状态
+export function editRoadShowState(params) {
+  return request({
+    url: '?m=roadShow&a=editRoadShowState',
+    method: 'post',
+    data: params
+  })
+}
+
+//路演列表
+export function getRoadShowRegisterList(params) {
+  return request({
+    url: '?m=roadShow&a=getRoadShowRegisterList',
     method: 'post',
     data: params
   })

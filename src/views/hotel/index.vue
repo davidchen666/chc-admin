@@ -2,7 +2,7 @@
   <div class="app-container">
     <div style="margin-bottom:20px;">
       <el-row>
-        <el-col :span="6"><el-input placeholder="输入关键字，按回车键字搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData(currentPage = 1)"/></el-col>
+        <el-col :span="6"><el-input placeholder="输入关键字，按回车键搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData(currentPage = 1)"/></el-col>
         <el-col :span="4">
           <el-select v-model="listQuery.status" placeholder="状态" @change="fetchData(currentPage = 1)">
             <el-option
@@ -44,13 +44,13 @@
       <el-table-column align="center" prop="created_at" label="创建时间" width="180">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span>{{scope.row.c_date}}</span>
+          <span>{{scope.row.create_date}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="更新时间" width="180">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span>{{scope.row.u_date}}</span>
+          <span>{{scope.row.update_date}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="编辑" >
