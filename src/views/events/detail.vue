@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-tabs type="border-card">
+    <el-tabs>
         <el-tab-pane label="会议信息"><eventsInfo @changeShowMenu="changeShowMenu"></eventsInfo></el-tab-pane>
         <el-tab-pane label="关于会议" :disabled="menuList[1]['isClose']"><eventsAbout></eventsAbout></el-tab-pane>
         <el-tab-pane label="会议日程" :disabled="menuList[2]['isClose']"><eventsSchedule></eventsSchedule></el-tab-pane>
@@ -70,7 +70,7 @@ import eventsSchedule from './detail/schedule.vue'
 import eventsSpeaker from './detail/speaker.vue' 
 import eventsSupportMedia from './detail/supportMedia.vue' 
 export default {
-    components: {eventsInfo,eventsAbout,eventsCost,eventsPastEvents,eventsRoadShow,eventsSchedule,eventsSpeaker,eventsSupportMedia},  
+    components: {eventsInfo,eventsAbout,eventsCost,eventsPastEvents,eventsRoadShow,eventsSchedule,eventsSpeaker,eventsSupportMedia},
     data() {
         return { 
           menuList:[
