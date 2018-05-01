@@ -9,6 +9,46 @@ export function getEventsList(params) {
     data: params
   })
 }
+//添加会议
+export function addEvents(params) {
+  return request({
+    url: '?m=events&a=addEvents',
+    method: 'post',
+    data: params
+  })
+}
+//编辑会议
+export function editEvents(params) {
+  return request({
+    url: '?m=events&a=editEvents',
+    method: 'post',
+    data: params
+  })
+}
+//获取会议详情
+export function getEventsInfo(params) {
+  return request({
+    url: '?m=events&a=getEventsInfo',
+    method: 'post',
+    data: params
+  })
+}
+//编辑会议
+export function editEventsInfo(params) {
+  return request({
+    url: '?m=events&a=editEventsInfo',
+    method: 'post',
+    data: params
+  })
+}
+//会议菜单列表
+export function getEventsMenuList(params) {
+  return request({
+    url: '?m=events&a=getEventsMenuList',
+    method: 'post',
+    data: params
+  })
+}
 //会议报名列表 
 export function getEventsRegisterList(params) {
   return request({

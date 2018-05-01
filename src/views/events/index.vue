@@ -31,10 +31,16 @@
           {{scope.row.events_name}}
         </template>
       </el-table-column>
-      <el-table-column label="会议时间" width="150" align="center">
+      <el-table-column label="会议开始日期" width="150" align="center">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span>{{scope.row.events_date}}</span>
+          <span>{{scope.row.events_begin_date}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="会议结束日期" width="150" align="center">
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span>{{scope.row.events_end_date}}</span>
         </template>
       </el-table-column>
       <el-table-column label="会议城市" width="110" align="center">
@@ -52,7 +58,7 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="会议链接" width="200">
         <template slot-scope="scope">
-          <span>{{scope.row.events_url}}</span>
+          <span><a :href="baseUrl+scope.row.events_id" target="_blank">{{baseUrl+scope.row.events_id}}</a></span>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
@@ -62,7 +68,7 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="查看" width="200">
         <template slot-scope="scope">
-          <router-link :to="'detail?id=' + scope.row.events_id"><i class="el-icon-edit"></i></router-link>
+          <router-link :to="'detail?events_id=' + scope.row.events_id"><i class="el-icon-edit"></i></router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -89,6 +95,7 @@ export default {
     return {
       list: null,
       listLoading: true,
+      baseUrl:'',
       listQuery:{
         searchVal: '',
         eventStatus: ''
@@ -122,6 +129,7 @@ export default {
   },
   created() {
     this.fetchData()
+    this.baseUrl = process.env.BASE_URL + '?m=events&a=detail&events_id=';
   },
   methods: {
     fetchData() {
