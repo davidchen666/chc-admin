@@ -2,15 +2,15 @@
     <div class="app-container">
         <el-form ref="form" :model="form" label-width="120px">
             <el-form-item label="大会主席">
-                <el-select v-model="events_speaker_main" multiple placeholder="请选择">
-                    <el-option v-for="item in speakerList" :key="item.speaker_id" :label="item.speaker_name" :value="item.speaker_id">{{item.speaker_name}}</el-option>
+                <el-select v-model="form.events_speaker_main" multiple placeholder="请选择">
+                    <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
                 </el-select>
             </el-form-item>
-            <!-- <el-form-item label="特邀嘉宾">
+            <el-form-item label="特邀嘉宾">
                 <el-select v-model="form.events_speaker_invite" multiple placeholder="请选择">
-                    <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id">{{item.speaker_name}}</el-option>
+                    <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
                 </el-select>
-            </el-form-item>  -->
+            </el-form-item> 
             <el-form-item>
                 <el-button type="primary" @click="saveInfo">保存</el-button>
                 <el-button @click="back">返回</el-button>
@@ -28,10 +28,9 @@ export default{
             listLoading: false,
             allLoading: '',
             speakerList: [],
-            events_speaker_main: [],
-            events_speaker_invite: [],
             queryData: 'events_speaker_main,events_speaker_invite',
             form: {
+                events_id: '',
                 events_speaker_main: [],
                 events_speaker_invite: []
             }
@@ -47,7 +46,7 @@ export default{
             let paramsData = {currentPage:1,pageSize:100};
             getSpeakerList(paramsData).then(response => {
                 this.speakerList = response.resData.items
-                console.log(this.speakerList);
+                // console.log(this.speakerList);
             })
         },
         getDetail(events_id) {
@@ -58,14 +57,13 @@ export default{
             };
             getEventsInfo(params).then(response => {
                 this.listLoading = false
-                console.log(response);
+                // console.log(response);
                 if(response.resCode === 200){
-                    response.resData.items[0].events_speaker_main ? response.resData.items[0].events_speaker_main:[];
-                    response.resData.items[0].events_speaker_invite ? response.resData.items[0].events_speaker_invite:[];
+                    response.resData.items[0].events_speaker_main = 
+                        response.resData.items[0].events_speaker_main ? JSON.parse(response.resData.items[0].events_speaker_main):[];
+                    response.resData.items[0].events_speaker_invite = 
+                        response.resData.items[0].events_speaker_invite ? JSON.parse(response.resData.items[0].events_speaker_invite):[];
                     this.form =  response.resData.items[0];
-                    
-                    // this.events_speaker_main = this.form.events_speaker_main;
-                    // this.events_speaker_invite = this.form.events_speaker_invite;
                 }
             })
         },
@@ -81,8 +79,7 @@ export default{
         saveInfo(){
             //编辑
             if(this.currentRouter === 'EventsDetail'){
-                // this.form.events_speaker_main = this.events_speaker_main;
-                // this.form.events_speaker_invite = this.events_speaker_invite;
+                this.beginLoad();
                 this.form.query = this.queryData;
                 editEventsInfo(this.form).then(response => {
                 // console.log(response)

@@ -1,9 +1,9 @@
 <template>
     <div class="app-container">
         <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item label="关联路演项目">
-                <el-select v-model="form.events_road_id" placeholder="请选择">
-                    <el-option v-for="item in listData" :key="item.road_id" :value="item.road_id" :label="item.road_name"></el-option>
+            <el-form-item label="选择酒店">
+                <el-select v-model="form.events_hotel_id" placeholder="请选择">
+                    <el-option v-for="item in listData" :key="item.hotel_id" :value="item.hotel_id" :label="item.hotel_name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -14,7 +14,7 @@
     </div>
 </template>
 <script>
-import { getEventsInfo, editEventsInfo, getRoadShowList } from '@/api/fetch'
+import { getEventsInfo, editEventsInfo, getHotelList } from '@/api/fetch'
 export default{
     data(){
         return{
@@ -23,10 +23,10 @@ export default{
             listLoading: false,
             allLoading: '',
             listData: [],
-            queryData: 'events_road_id',
+            queryData: 'events_hotel_id',
             form: {
                 events_id: '',
-                events_road_id: ''
+                events_hotel_id: ''
             }
         }
     },
@@ -38,7 +38,7 @@ export default{
     methods:{
         fetchList() {
             let paramsData = {currentPage:1,pageSize:100};
-            getRoadShowList(paramsData).then(response => {
+            getHotelList(paramsData).then(response => {
                 this.listData = response.resData.items
                 // console.log(this.listData);
             })
@@ -47,11 +47,11 @@ export default{
             this.listLoading = true
             let params = {
                 events_id: events_id,
-                query: this.queryData
+                query:this.queryData
             };
             getEventsInfo(params).then(response => {
                 this.listLoading = false
-                // console.log(response);
+                console.log(response);
                 if(response.resCode === 200){
                     this.form =  response.resData.items[0];
                 }

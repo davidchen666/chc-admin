@@ -5,10 +5,11 @@
         <el-tab-pane label="关于会议" :disabled="menuList[1]['isClose']"><eventsAbout></eventsAbout></el-tab-pane>
         <el-tab-pane label="会议日程" :disabled="menuList[2]['isClose']"><eventsSchedule></eventsSchedule></el-tab-pane>
         <el-tab-pane label="会议嘉宾" :disabled="menuList[3]['isClose']"><eventsSpeaker></eventsSpeaker></el-tab-pane>
-        <el-tab-pane label="支持媒体" :disabled="menuList[4]['isClose']"><eventsSupportMedia></eventsSupportMedia></el-tab-pane>
+        <el-tab-pane label="首页组织架构" :disabled="menuList[4]['isClose']"><eventsOrganizer></eventsOrganizer></el-tab-pane>
         <el-tab-pane label="历届会议" :disabled="menuList[5]['isClose']"><eventsPastEvents></eventsPastEvents></el-tab-pane>
-        <el-tab-pane label="会议价格" :disabled="menuList[6]['isClose']"><eventsCost></eventsCost></el-tab-pane>
+        <el-tab-pane label="会议报名" :disabled="menuList[6]['isClose']"><eventsRegister></eventsRegister></el-tab-pane>
         <el-tab-pane label="路演项目" :disabled="menuList[7]['isClose']"><eventsRoadShow></eventsRoadShow></el-tab-pane>
+        <el-tab-pane label="会议酒店" :disabled="menuList[7]['isClose']"><eventsHotel></eventsHotel></el-tab-pane>
         <!-- <span v-for="val in childrenMenuList" :key="val.menuId">
           <el-tab-pane :label="val.menuName">{{eventsInfo}}</el-tab-pane>
         </span> -->
@@ -63,14 +64,15 @@
 <script>
 import eventsInfo from './detail/info.vue' 
 import eventsAbout from './detail/about.vue' 
-import eventsCost from './detail/cost.vue' 
+import eventsRegister from './detail/register.vue' 
 import eventsPastEvents from './detail/pastEvents.vue' 
 import eventsRoadShow from './detail/roadShow.vue' 
 import eventsSchedule from './detail/schedule.vue' 
 import eventsSpeaker from './detail/speaker.vue' 
-import eventsSupportMedia from './detail/supportMedia.vue' 
+import eventsOrganizer from './detail/organizer.vue' 
+import eventsHotel from './detail/hotel.vue' 
 export default {
-    components: {eventsInfo,eventsAbout,eventsCost,eventsPastEvents,eventsRoadShow,eventsSchedule,eventsSpeaker,eventsSupportMedia},
+    components: {eventsInfo,eventsAbout,eventsRegister,eventsPastEvents,eventsRoadShow,eventsSchedule,eventsSpeaker,eventsOrganizer,eventsHotel},
     data() {
         return { 
           menuList:[

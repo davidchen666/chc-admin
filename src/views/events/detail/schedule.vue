@@ -62,6 +62,7 @@ export default{
         saveInfo(){
             //编辑
             if(this.currentRouter === 'EventsDetail'){
+                this.beginLoad();
                 this.form.query = this.queryData;
                 editEventsInfo(this.form).then(response => {
                 // console.log(response)

@@ -2,7 +2,7 @@
     <div class="app-container" v-loading.body="listLoading">
         <el-form ref="form" :model="form" label-width="120px">
             <el-form-item label="关于会议">
-                <el-input placeholder="请输入关于会议内容" v-model="form.events_about"> </el-input>
+                <el-input type="textarea" placeholder="请输入关于会议内容" autosize v-model="form.events_about"> </el-input>
             </el-form-item>
             <el-form-item label="关于会议(简化)">
                 <el-input type="textarea" autosize placeholder="请输入关于会议内容" v-model="form.events_about_simple"> </el-input>
@@ -72,6 +72,7 @@ export default{
         saveInfo(){
             //编辑
             if(this.currentRouter === 'EventsDetail'){
+                this.beginLoad();
                 this.form.query = this.queryData;
                 editEventsInfo(this.form).then(response => {
                 // console.log(response)
