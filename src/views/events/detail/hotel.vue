@@ -14,90 +14,91 @@
     </div>
 </template>
 <script>
-import { getEventsInfo, editEventsInfo, getHotelList } from '@/api/fetch'
-export default{
-    data(){
-        return{
-            autoSize: { minRows: 2, maxRows: 4},
-            currentRouter: '',
-            listLoading: false,
-            allLoading: '',
-            listData: [],
-            queryData: 'events_hotel_id',
-            form: {
-                events_id: '',
-                events_hotel_id: ''
-            }
+import { getEventsInfo, editEventsInfo, getHotelList } from "@/api/fetch";
+export default {
+  data() {
+    return {
+      autoSize: { minRows: 2, maxRows: 4 },
+      currentRouter: "",
+      listLoading: false,
+      allLoading: "",
+      listData: [],
+      queryData: "events_hotel_id",
+      form: {
+        events_id: "",
+        events_hotel_id: ""
+      }
+    };
+  },
+  created() {
+    this.currentRouter = this.$route.name;
+    this.fetchList();
+    this.getDetail(this.$route.query.events_id);
+  },
+  methods: {
+    fetchList() {
+      let paramsData = { currentPage: 1, pageSize: 100 };
+      getHotelList(paramsData).then(response => {
+        this.listData = response.resData.items;
+        // console.log(this.listData);
+      });
+    },
+    getDetail(events_id) {
+      this.listLoading = true;
+      let params = {
+        events_id: events_id,
+        query: this.queryData
+      };
+      getEventsInfo(params).then(response => {
+        this.listLoading = false;
+        // console.log(response);
+        if (response.resCode === 200) {
+          this.form = response.resData.items[0];
         }
+      });
     },
-    created(){
-        this.currentRouter = this.$route.name;
-        this.fetchList();
-        this.getDetail(this.$route.query.events_id);
+    //======loading======
+    beginLoad() {
+      this.allLoading = this.$loading({
+        lock: true,
+        text: "请求中，请稍等...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
     },
-    methods:{
-        fetchList() {
-            let paramsData = {currentPage:1,pageSize:100};
-            getHotelList(paramsData).then(response => {
-                this.listData = response.resData.items
-                // console.log(this.listData);
-            })
-        },
-        getDetail(events_id) {
-            this.listLoading = true
-            let params = {
-                events_id: events_id,
-                query:this.queryData
-            };
-            getEventsInfo(params).then(response => {
-                this.listLoading = false
-                console.log(response);
-                if(response.resCode === 200){
-                    this.form =  response.resData.items[0];
-                }
-            })
-        },
-        //======loading======
-        beginLoad(){
-            this.allLoading = this.$loading({
-                lock: true,
-                text: '请求中，请稍等...',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)'
+    saveInfo() {
+      //编辑
+      if (this.currentRouter === "EventsDetail") {
+        this.beginLoad();
+        this.form.query = this.queryData;
+        editEventsInfo(this.form).then(response => {
+          // console.log(response)
+          if (response && response.resCode === 200 && response.resData) {
+            this.$message({
+              message: "修改成功。",
+              type: "success"
             });
-        },
-        saveInfo(){
-            //编辑
-            if(this.currentRouter === 'EventsDetail'){
-                this.beginLoad();
-                this.form.query = this.queryData;
-                editEventsInfo(this.form).then(response => {
-                // console.log(response)
-                if(response && response.resCode === 200 && response.resData){
-                    this.$message({
-                    message: '修改成功。',
-                    type: 'success'
-                    });
-                    this.allLoading.close();
-                }else{
-                    this.allLoading.close();
-                }
-                })
-            }else{
-                this.$message({
-                    message: '操作失败！请先保存会议信息。',
-                    type: 'success'
-                });
-            }
-        },
-        back(){
-            history.go(-1);
-        }
+            this.allLoading.close();
+          } else {
+            this.allLoading.close();
+          }
+        });
+      } else {
+        this.$message({
+          message: "操作失败！请先保存会议信息。",
+          type: "success"
+        });
+      }
+    },
+    back() {
+      history.go(-1);
     }
-}
+  }
+};
 </script>
 <style>
-.el-textarea,.el-input{
-    width: 500px;
+.el-textarea,
+.el-input {
+  width: 500px;
 }
 </style>

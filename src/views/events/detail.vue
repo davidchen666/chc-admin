@@ -62,75 +62,85 @@
 </template>
 
 <script>
-import eventsInfo from './detail/info.vue' 
-import eventsAbout from './detail/about.vue' 
-import eventsRegister from './detail/register.vue' 
-import eventsPastEvents from './detail/pastEvents.vue' 
-import eventsRoadShow from './detail/roadShow.vue' 
-import eventsSchedule from './detail/schedule.vue' 
-import eventsSpeaker from './detail/speaker.vue' 
-import eventsOrganizer from './detail/organizer.vue' 
-import eventsHotel from './detail/hotel.vue' 
+import eventsInfo from "./detail/info.vue";
+import eventsAbout from "./detail/about.vue";
+import eventsRegister from "./detail/register.vue";
+import eventsPastEvents from "./detail/pastEvents.vue";
+import eventsRoadShow from "./detail/roadShow.vue";
+import eventsSchedule from "./detail/schedule.vue";
+import eventsSpeaker from "./detail/speaker.vue";
+import eventsOrganizer from "./detail/organizer.vue";
+import eventsHotel from "./detail/hotel.vue";
 export default {
-    components: {eventsInfo,eventsAbout,eventsRegister,eventsPastEvents,eventsRoadShow,eventsSchedule,eventsSpeaker,eventsOrganizer,eventsHotel},
-    data() {
-        return { 
-          menuList:[
-            {
-              menuId: '1',
-              menuName: '会议首页',
-              isClose: false,
-            },
-            {
-              menuId: '2',
-              menuName: '关于会议',
-              isClose: true
-            },
-            {
-              menuId: '3',
-              menuName: '会议日程',
-              isClose: true
-            },
-            {
-              menuId: '4',
-              menuName: '演讲嘉宾',
-              isClose: true
-            },
-            {
-              menuId: '5',
-              menuName: '会议酒店',
-              isClose: true
-            },
-            {
-              menuId: '6',
-              menuName: '历届回顾',
-              isClose: true
-            },
-            {
-              menuId: '7',
-              menuName: '会议报名',
-              isClose: true
-            },
-            {
-              menuId: '8',
-              menuName: '路演项目报名',
-              isClose: true
-            },
-          ],
-        }
+  components: {
+    eventsInfo,
+    eventsAbout,
+    eventsRegister,
+    eventsPastEvents,
+    eventsRoadShow,
+    eventsSchedule,
+    eventsSpeaker,
+    eventsOrganizer,
+    eventsHotel
   },
-  created(){
+  data() {
+    return {
+      menuList: [
+        {
+          menuId: "1",
+          menuName: "会议首页",
+          isClose: false
+        },
+        {
+          menuId: "2",
+          menuName: "关于会议",
+          isClose: true
+        },
+        {
+          menuId: "3",
+          menuName: "会议日程",
+          isClose: true
+        },
+        {
+          menuId: "4",
+          menuName: "演讲嘉宾",
+          isClose: true
+        },
+        {
+          menuId: "5",
+          menuName: "会议酒店",
+          isClose: true
+        },
+        {
+          menuId: "6",
+          menuName: "历届回顾",
+          isClose: true
+        },
+        {
+          menuId: "7",
+          menuName: "会议报名",
+          isClose: true
+        },
+        {
+          menuId: "8",
+          menuName: "路演项目报名",
+          isClose: true
+        }
+      ]
+    };
+  },
+  created() {
     this.menuList.forEach(items => {
       items.isClose = false;
     });
   },
   methods: {
-    changeShowMenu(mData){
+    changeShowMenu(mData) {
       this.menuList.forEach(items => {
         items.isClose = true;
       });
       mData.forEach(element => {
-        this.menuList[element-1].isClose = false;
+        this.menuList[element - 1].isClose = false;
       });
     }
     // onSubmit() {
@@ -143,11 +153,11 @@ export default {
     //   })
     // }
   }
-}
+};
 </script>
 
 <style scoped>
-.line{
+.line {
   text-align: center;
 }
 </style>
