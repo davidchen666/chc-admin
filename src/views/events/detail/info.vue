@@ -21,12 +21,12 @@
         </el-select>
         <span> <a> * 如信息有变更，请修改或新增酒店信息</a></span>
       </el-form-item> -->
-      <el-form-item label="导航显示">
+      <!-- <el-form-item label="导航显示">
         <el-checkbox-group v-model="form.events_menu">
           <el-checkbox v-for="item in menuList" :key="item.id" :label="item.id" name="type">{{item.name}}</el-checkbox>
         </el-checkbox-group>
         <span> * 如勾选显示相关导航，请完善相关内容</span>
-      </el-form-item>
+      </el-form-item> -->
       <!-- <el-form-item label="会议标签">
         <el-input v-model="form.events_tag" placeholder="会议标签"></el-input>
       </el-form-item> -->
@@ -42,6 +42,18 @@
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
+      </el-form-item>
+      <el-form-item label="历届图片(x1)">
+        <el-upload :action="uploadUrl" list-type="picture-card" :file-list="pastPicList" :on-error="picError" :multiple="pastMultiple" :limit='pastPicLimit' 
+        :on-exceed="overPastPicLimit" :on-success="pastPicSuccess" :on-preview="handlePastPictureCardPreview" :on-remove="handlPastRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+      </el-form-item>
+      <el-form-item label="历届会议中标题">
+        <el-input v-model="form.past_title" placeholder="历届会议显示标题"></el-input>
       </el-form-item>
       <el-form-item label="会议备注">
         <el-input type="textarea" autosize placeholder="会议备注" v-model="form.events_remark" > </el-input>
@@ -70,6 +82,9 @@ export default {
       eventsMultiple: false,
       eventsPicLimit: 1,
       dialogImageUrl: '',
+      pastPicList:[],
+      pastMultiple: false,
+      pastPicLimit: 1,
       menuList: [],
       events_date:[],
       form: {
@@ -78,6 +93,8 @@ export default {
           events_end_date:'',
           events_city:'',
           events_pic:'',
+          past_pic:'',
+          past_title: '',
           events_menu: ['1','2','3','4','5','6','7','8'],
           events_remark: '',
           events_state: '-1'
@@ -112,6 +129,7 @@ export default {
         }
       }else{
         this.eventsPicList = [];
+        this.pastPicList = [];
         this.events_date = [];
         this.form = {
           events_name:'',
@@ -119,6 +137,8 @@ export default {
           events_end_date:'',
           events_city:'',
           events_pic:'',
+          past_pic:'',
+          past_title:'',
           events_menu: ['1','2','3','4','5','6','7','8'],
           events_remark: '',
           events_state: '-1'
@@ -149,6 +169,12 @@ export default {
             this.eventsPicList=[{
               name: this.form.events_pic,
               url: process.env.BASE_TOTAL_API + 'uploads/events/' + this.form.events_pic
+            }];
+          }
+          if(this.form.past_pic){
+            this.pastPicList=[{
+              name: this.form.past_pic,
+              url: process.env.BASE_TOTAL_API + 'uploads/events/' + this.form.past_pic
             }];
           }
         }
@@ -206,6 +232,46 @@ export default {
         this.form.events_pic = '';
       }
       console.log(this.form.events_pic);
+    },
+    //=====upload past pic=======
+    handlPastRemove(file, fileList) {
+      // console.log(file, fileList);
+      this.reloadPastPic(fileList);
+    },
+    handlePastPictureCardPreview(file) {
+      // this.dialogImageUrl = file.url;
+      this.dialogImageUrl = process.env.BASE_TOTAL_API + 'uploads/events/' + file.name;
+      // console.log(this.dialogImageUrl);
+      this.dialogVisible = true;
+    },
+    pastPicSuccess(response, file, fileList){
+      console.log(response, file, fileList);
+      if(response.resCode === 400){
+        fileList.pop();
+        this.$message({
+          message: response.resData,
+          type: 'warning'
+        })
+      }else{
+        file.name = response.resData.newname;
+      }
+      this.reloadPastPic(fileList);
+    },
+    overPastPicLimit(files, fileList){
+      this.$message({
+        message: '上传失败，最多可以上传' + this.pastPicLimit + '张图片',
+        type: 'warning'
+      })
+    },
+    //重新计算 pic
+    reloadPastPic(fileList){
+      console.log(fileList);
+      if(fileList && fileList.length && fileList[0].name){
+        this.form.past_pic = fileList[0].name;
+      }else{
+        this.form.past_pic = '';
+      }
+      console.log(this.form.past_pic);
     },
     //======loading======
     beginLoad(){

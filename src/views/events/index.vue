@@ -88,59 +88,61 @@
 </template>
 
 <script>
-import { getEventsList } from '@/api/fetch'
+import { getEventsList } from "@/api/fetch";
 
 export default {
   data() {
     return {
       list: null,
       listLoading: true,
-      baseUrl:'',
-      listQuery:{
-        searchVal: '',
-        eventStatus: ''
+      baseUrl: "",
+      listQuery: {
+        searchVal: "",
+        eventStatus: ""
       },
       currentPage: 1,
       pageSize: 10,
       totalData: 0,
       eventStatus: [
         {
-          value: '',
-          label: '全部'
+          value: "",
+          label: "全部"
         },
         {
-          value: '1',
-          label: '上线'
-        }, {
-          value: '-1',
-          label: '下线'
-        }],
-    }
+          value: "1",
+          label: "上线"
+        },
+        {
+          value: "-1",
+          label: "下线"
+        }
+      ]
+    };
   },
   filters: {
     statusFilter(status) {
       const statusMap = {
-        '1': 'success',
-        '-1': 'gray',
+        "1": "success",
+        "-1": "gray"
         // deleted: 'danger'
-      }
-      return statusMap[status]
+      };
+      return statusMap[status];
     }
   },
   created() {
-    this.fetchData()
-    this.baseUrl = process.env.BASE_URL + '?m=events&a=detail&events_id=';
+    this.fetchData();
+    this.baseUrl = process.env.BASE_URL + "?m=events&a=detail&events_id=";
   },
   methods: {
     fetchData() {
-      this.listLoading = true
+      this.listLoading = true;
       this.listQuery.currentPage = this.currentPage;
       this.listQuery.pageSize = this.pageSize;
       getEventsList(this.listQuery).then(response => {
-        this.list = response.resData.items
-        this.totalData = parseInt(response.resData.page.total)
-        this.listLoading = false
-      })
+        this.list = response.resData.items;
+        this.totalData = parseInt(response.resData.page.total);
+        this.listLoading = false;
+      });
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -151,5 +153,5 @@ export default {
       this.fetchData();
     }
   }
-}
+};
 </script>

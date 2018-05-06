@@ -92,46 +92,48 @@
 </template>
 
 <script>
-import { getSpeakerList, editSpeakerState } from '@/api/fetch'
+import { getSpeakerList, editSpeakerState } from "@/api/fetch";
 
 export default {
   data() {
     return {
       list: null,
       listLoading: true,
-      listQuery:{
-        searchVal: '',
-        status: ''
+      listQuery: {
+        searchVal: "",
+        status: ""
       },
       currentPage: 1,
       pageSize: 10,
       totalData: 0,
       userStatus: [
         {
-          value: '',
-          label: '全部'
+          value: "",
+          label: "全部"
         },
         {
-          value: '1',
-          label: '上线'
-        }, {
-          value: '-1',
-          label: '下线'
-        }],
+          value: "1",
+          label: "上线"
+        },
+        {
+          value: "-1",
+          label: "下线"
+        }
+      ],
       showType: null,
       dialogFormVisible: false,
-      formLabelWidth: '120px',
-      allLoading: ''
-    }
+      formLabelWidth: "120px",
+      allLoading: ""
+    };
   },
   filters: {
     statusFilter(status) {
       const statusMap = {
-        '1': 'success',
-        '-1': 'gray',
+        "1": "success",
+        "-1": "gray"
         // deleted: 'danger'
-      }
-      return statusMap[status]
+      };
+      return statusMap[status];
     }
   },
   created() {
@@ -140,14 +142,14 @@ export default {
   methods: {
     //加载表格
     fetchData() {
-      this.listLoading = true
+      this.listLoading = true;
       this.listQuery.currentPage = this.currentPage;
       this.listQuery.pageSize = this.pageSize;
       getSpeakerList(this.listQuery).then(response => {
-        this.list = response.resData.items
-        this.totalData = parseInt(response.resData.page.total)
-        this.listLoading = false
-      })
+        this.list = response.resData.items;
+        this.totalData = parseInt(response.resData.page.total);
+        this.listLoading = false;
+      });
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -157,50 +159,59 @@ export default {
       this.currentPage = val;
       this.fetchData();
     },
-    beginLoad(){
+    beginLoad() {
       this.allLoading = this.$loading({
         lock: true,
-        text: 'Loading',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
       });
     },
     //更改状态
-    changeState(dData,needState){
-      let stateStr = dData.speaker_state == '1'? ' 设置为下线状态，将在会议设置中不显示该嘉宾':' 设置为上线状态，将在会议设置中显示该嘉宾';
-      this.$confirm('此操作将把'+ dData.speaker_name + stateStr +', 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.beginLoad();
-        let params = {
-          speakerid: dData.speaker_id,
-          state: needState
+    changeState(dData, needState) {
+      let stateStr =
+        dData.speaker_state == "1"
+          ? " 设置为下线状态，将在会议设置中不显示该嘉宾"
+          : " 设置为上线状态，将在会议设置中显示该嘉宾";
+      this.$confirm(
+        "此操作将把" + dData.speaker_name + stateStr + ", 是否继续?",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
         }
-        editSpeakerState(params).then(response => {
-          if(response && response.resCode === 200 && response.resData){
-            this.$message({
-              message: '状态修改成功。',
-              type: 'success'
+      )
+        .then(() => {
+          this.beginLoad();
+          let params = {
+            speakerid: dData.speaker_id,
+            state: needState
+          };
+          editSpeakerState(params)
+            .then(response => {
+              if (response && response.resCode === 200 && response.resData) {
+                this.$message({
+                  message: "状态修改成功。",
+                  type: "success"
+                });
+                this.fetchData();
+                this.allLoading.close();
+              } else {
+                this.allLoading.close();
+              }
+            })
+            .catch(() => {
+              this.allLoading.close();
             });
-            this.fetchData();
-            this.allLoading.close();
-          }else{
-            this.allLoading.close();
-          }
-        }).catch(() => {
-          this.allLoading.close();
-        })     
-      }).catch(() => {
-              
-      });
-    },
+        })
+        .catch(() => {});
+    }
   }
-}
+};
 </script>
 <style>
-.el-input{
+.el-input {
   width: 80%;
 }
 </style>

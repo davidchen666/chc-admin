@@ -284,6 +284,52 @@ export const constantRouterMap = [
     ]
   },
 
+  //咨询服务
+  {
+    path: '/services',
+    component: Layout,
+    redirect: '/services/person',
+    name: 'Services',
+    meta: { title: '咨询服务', icon: 'example' },
+    children: [
+      {
+        path: 'person',
+        name: 'ServicesPerson',
+        component: () => import('@/views/services/person'),
+        meta: { title: '精准人才', icon: 'table' }
+      },
+      {
+        path: 'register',
+        name: 'ServicesRegister',
+        component: () => import('@/views/services/register'),
+        meta: { title: '产品注册', icon: 'table' }
+      },
+      {
+        path: 'plan',
+        name: 'ServicesPlan',
+        component: () => import('@/views/services/plan'),
+        meta: { title: '园区规划', icon: 'table' }
+      },
+    ]
+  },
+
+  //关于我们
+  {
+    path: '/about',
+    component: Layout,
+    redirect: '/about/detail',
+    name: 'About',
+    meta: { title: '关于我们', icon: 'example' },
+    children: [
+      {
+        path: 'detail',
+        name: 'AboutDetail',
+        component: () => import('@/views/about/detail'),
+        meta: { title: '关于我们', icon: 'table' }
+      },
+    ]
+  },
+
   //管理员管理
   {
     path: '/admin',

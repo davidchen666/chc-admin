@@ -211,6 +211,58 @@ export function getRoadShowRegisterList(params) {
   })
 }
 
+//========================= news =========================
+//新闻列表
+export function getNewsList(params) {
+  return request({
+    url: '?m=news&a=getNewsList',
+    method: 'post',
+    data: params
+  })
+}
+//添加新闻
+export function addNews(params) {
+  return request({
+    url: '?m=news&a=addNews',
+    method: 'post',
+    data: params
+  })
+}
+//编辑新闻
+export function editNews(params) {
+  return request({
+    url: '?m=news&a=editNews',
+    method: 'post',
+    data: params
+  })
+}
+//更改状态
+export function editNewsState(params) {
+  return request({
+    url: '?m=news&a=editNewsState',
+    method: 'post',
+    data: params
+  })
+}
+
+//======================== Page ===========================
+//关于我们/咨询服务page
+export function getPage(params) {
+  return request({
+    url: '?m=about&a=getPage',
+    method: 'post',
+    data: params
+  })
+}
+//编辑 关于我们/咨询服务page
+export function editPage(params) {
+  return request({
+    url: '?m=about&a=editPage',
+    method: 'post',
+    data: params
+  })
+}
+
 //========================= admin =========================
 
 //管理员列表

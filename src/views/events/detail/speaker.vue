@@ -19,95 +19,100 @@
     </div>
 </template>
 <script>
-import { getEventsInfo, editEventsInfo, getSpeakerList } from '@/api/fetch'
-export default{
-    data(){
-        return{
-            autoSize: { minRows: 2, maxRows: 4},
-            currentRouter: '',
-            listLoading: false,
-            allLoading: '',
-            speakerList: [],
-            queryData: 'events_speaker_main,events_speaker_invite',
-            form: {
-                events_id: '',
-                events_speaker_main: [],
-                events_speaker_invite: []
-            }
+import { getEventsInfo, editEventsInfo, getSpeakerList } from "@/api/fetch";
+export default {
+  data() {
+    return {
+      autoSize: { minRows: 2, maxRows: 4 },
+      currentRouter: "",
+      listLoading: false,
+      allLoading: "",
+      speakerList: [],
+      queryData: "events_speaker_main,events_speaker_invite",
+      form: {
+        events_id: "",
+        events_speaker_main: [],
+        events_speaker_invite: []
+      }
+    };
+  },
+  created() {
+    this.currentRouter = this.$route.name;
+    this.fetchSpeakerList();
+    this.getDetail(this.$route.query.events_id);
+  },
+  methods: {
+    fetchSpeakerList() {
+      let paramsData = { currentPage: 1, pageSize: 100 };
+      getSpeakerList(paramsData).then(response => {
+        this.speakerList = response.resData.items;
+        // console.log(this.speakerList);
+      });
+    },
+    getDetail(events_id) {
+      this.listLoading = true;
+      let params = {
+        events_id: events_id,
+        query: this.queryData
+      };
+      getEventsInfo(params).then(response => {
+        this.listLoading = false;
+        // console.log(response);
+        if (response.resCode === 200) {
+          response.resData.items[0].events_speaker_main = response.resData
+            .items[0].events_speaker_main
+            ? JSON.parse(response.resData.items[0].events_speaker_main)
+            : [];
+          response.resData.items[0].events_speaker_invite = response.resData
+            .items[0].events_speaker_invite
+            ? JSON.parse(response.resData.items[0].events_speaker_invite)
+            : [];
+          this.form = response.resData.items[0];
         }
+      });
     },
-    created(){
-        this.currentRouter = this.$route.name;
-        this.fetchSpeakerList();
-        this.getDetail(this.$route.query.events_id);
+    //======loading======
+    beginLoad() {
+      this.allLoading = this.$loading({
+        lock: true,
+        text: "请求中，请稍等...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)"
+      });
     },
-    methods:{
-        fetchSpeakerList() {
-            let paramsData = {currentPage:1,pageSize:100};
-            getSpeakerList(paramsData).then(response => {
-                this.speakerList = response.resData.items
-                // console.log(this.speakerList);
-            })
-        },
-        getDetail(events_id) {
-            this.listLoading = true
-            let params = {
-                events_id: events_id,
-                query:this.queryData
-            };
-            getEventsInfo(params).then(response => {
-                this.listLoading = false
-                // console.log(response);
-                if(response.resCode === 200){
-                    response.resData.items[0].events_speaker_main = 
-                        response.resData.items[0].events_speaker_main ? JSON.parse(response.resData.items[0].events_speaker_main):[];
-                    response.resData.items[0].events_speaker_invite = 
-                        response.resData.items[0].events_speaker_invite ? JSON.parse(response.resData.items[0].events_speaker_invite):[];
-                    this.form =  response.resData.items[0];
-                }
-            })
-        },
-        //======loading======
-        beginLoad(){
-            this.allLoading = this.$loading({
-                lock: true,
-                text: '请求中，请稍等...',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.7)'
+    saveInfo() {
+      //编辑
+      if (this.currentRouter === "EventsDetail") {
+        this.beginLoad();
+        this.form.query = this.queryData;
+        editEventsInfo(this.form).then(response => {
+          // console.log(response)
+          if (response && response.resCode === 200 && response.resData) {
+            this.$message({
+              message: "修改成功。",
+              type: "success"
             });
-        },
-        saveInfo(){
-            //编辑
-            if(this.currentRouter === 'EventsDetail'){
-                this.beginLoad();
-                this.form.query = this.queryData;
-                editEventsInfo(this.form).then(response => {
-                // console.log(response)
-                if(response && response.resCode === 200 && response.resData){
-                    this.$message({
-                    message: '修改成功。',
-                    type: 'success'
-                    });
-                    this.allLoading.close();
-                }else{
-                    this.allLoading.close();
-                }
-                })
-            }else{
-                this.$message({
-                    message: '操作失败！请先保存会议信息。',
-                    type: 'success'
-                });
-            }
-        },
-        back(){
-            history.go(-1);
-        }
+            this.allLoading.close();
+          } else {
+            this.allLoading.close();
+          }
+        });
+      } else {
+        this.$message({
+          message: "操作失败！请先保存会议信息。",
+          type: "success"
+        });
+      }
+    },
+    back() {
+      history.go(-1);
     }
-}
+  }
+};
 </script>
 <style>
-.el-textarea,.el-input{
-    width: 500px;
+.el-textarea,
+.el-input {
+  width: 500px;
 }
 </style>

@@ -22,9 +22,8 @@
       </el-form-item>
       <el-form-item label="到达指引">
         <UE :defaultMsg=form.arrive_info :config=config :id=arriveInfo :ref=arriveInfo></UE>
-        <!-- <el-input type="textarea" autosize placeholder="会议备注" v-model="form.hotel_remark" > </el-input> -->
       </el-form-item>
-      <el-form-item label="到达图片(x1)">
+      <!-- <el-form-item label="到达图片(x1)">
         <el-upload :action="uploadUrl" list-type="picture-card" :file-list="arrivePicList" :on-error="picError" :multiple="arriveMultiple" :limit='arrivePicLimit' 
         :on-exceed="overArrivePicLimit" :on-success="arrivePicSuccess" :on-preview="handleArrivePictureCardPreview" :on-remove="handleArriveRemove">
           <i class="el-icon-plus"></i>
@@ -32,7 +31,7 @@
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="备注信息">
         <el-input type="textarea" autosize placeholder="会议备注" v-model="form.hotel_remark" > </el-input>
       </el-form-item>
