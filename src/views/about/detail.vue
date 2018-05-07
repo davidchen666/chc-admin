@@ -1,9 +1,12 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="是否上线"  v-loading.body="listLoading" element-loading-text="加载中">
+      <!-- <el-form-item label="是否上线"  v-loading.body="listLoading" element-loading-text="加载中">
         <el-radio v-model="form.state" label="1">上线</el-radio>
         <el-radio v-model="form.state" label="-1">不上线</el-radio>
+      </el-form-item> -->
+      <el-form-item label="访问地址">
+        <a :href="baseUrl" target="_blank">{{baseUrl}}</a>
       </el-form-item>
       <el-form-item label="banner图片 (x1)">
         <el-upload :action="uploadUrl" list-type="picture-card" :file-list="aboutPicList" :on-error="picError" :multiple="aboutMultiple" :limit='aboutPicLimit' 
@@ -67,6 +70,7 @@ export default {
     // console.log(process.env);
     //上传地址
     this.uploadUrl = process.env.BASE_API + "?m=about&a=uploadFile";
+    this.baseUrl = process.env.BASE_URL + '?m=about&a=index';
     this.init();
   },
   watch: {
