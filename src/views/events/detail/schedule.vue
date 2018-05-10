@@ -4,9 +4,13 @@
             <el-form-item label="会议日程标题">
                 <el-input placeholder="请输入会议日程标题" v-model="form.events_schedule_title"> </el-input>
             </el-form-item>
-            <el-form-item label="会议日程内容">
+            <el-form-item label="内容(完全版)">
                 <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content"> </el-input>
                 <span>请输入关于会议日程内容，回车换行新增，格式如 9:00-9:10->会议签到</span>
+            </el-form-item>
+            <el-form-item label="内容(简化)">
+                <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content_simple"> </el-input>
+                <span>显示于首页，若不填写，首页将显示完全版。回车换行新增，格式如 9:00-9:10->会议签到</span>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="saveInfo">保存</el-button>
@@ -24,10 +28,11 @@ export default {
       currentRouter: "",
       listLoading: false,
       allLoading: "",
-      queryData: "events_schedule_title,events_schedule_content",
+      queryData: "events_schedule_title,events_schedule_content,events_schedule_content_simple",
       form: {
         events_schedule_title: "",
-        events_schedule_content: ""
+        events_schedule_content: "",
+        events_schedule_content_simple: "",
       }
     };
   },

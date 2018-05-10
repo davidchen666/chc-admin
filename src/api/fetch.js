@@ -245,6 +245,16 @@ export function editNewsState(params) {
   })
 }
 
+//======================== banking ===========================
+//精准投行报名表
+export function getBankingRegisterList(params) {
+  return request({
+    url: '?m=banking&a=getBankingRegisterList',
+    method: 'post',
+    data: params
+  })
+}
+
 //======================== Page ===========================
 //关于我们/咨询服务page
 export function getPage(params) {

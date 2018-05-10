@@ -1,16 +1,41 @@
 <template>
     <div class="app-container">
+        
         <el-form ref="form" :model="form" label-width="120px">
+            <el-form-item label="">
+              <el-input placeholder="请输入关键字搜索嘉宾" v-model="searchVal" class="input-with-select">
+                <el-button slot="append" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            
             <el-form-item label="大会主席">
                 <el-select v-model="form.events_speaker_main" multiple placeholder="请选择">
-                    <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
+                  <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="特邀嘉宾">
                 <el-select v-model="form.events_speaker_invite" multiple placeholder="请选择">
-                    <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
+                  <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
                 </el-select>
-            </el-form-item> 
+            </el-form-item>
+<!-- {{form.speaker}} -->
+            <div v-for="(val,key) in form.speaker" :key="key">
+              <el-form-item label="嘉宾类目">
+                <el-col :span="4" class="small-input">
+                  <el-input :placeholder="val"></el-input>
+                </el-col>
+                <el-col class="line" :span="2">嘉宾人员</el-col>
+                <el-col :span="10">
+                  <el-select v-model="form.events_speaker_invite" multiple placeholder="请选择">
+                    <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col class="line" :span="5">
+                  <el-button type="primary" @click="addType">添加新类目</el-button>
+                </el-col>
+              </el-form-item>
+            </div>
+
             <el-form-item>
                 <el-button type="primary" @click="saveInfo">保存</el-button>
                 <el-button @click="back">返回</el-button>
@@ -27,17 +52,25 @@ export default {
       currentRouter: "",
       listLoading: false,
       allLoading: "",
+      addSpeakerData: "",
       speakerList: [],
       queryData: "events_speaker_main,events_speaker_invite",
+      sampleSpeaker: {
+        speaker_type: "",
+        speaker_data: []
+      },
       form: {
         events_id: "",
         events_speaker_main: [],
-        events_speaker_invite: []
-      }
+        events_speaker_invite: [],
+        speaker: []
+      },
+      searchVal: ""
     };
   },
   created() {
     this.currentRouter = this.$route.name;
+    
     this.fetchSpeakerList();
     this.getDetail(this.$route.query.events_id);
   },
@@ -69,7 +102,19 @@ export default {
             : [];
           this.form = response.resData.items[0];
         }
+        this.form.speaker = [];
+        this.form.speaker.push(this.sampleSpeaker);
       });
+    },
+    //
+    addType() {
+      this.form.speaker.push(this.sampleSpeaker);
+      // this.form.speaker.push(this.sampleSpeaker);
+//       var _data = ["Banana", "Orange", "Apple", "Mango"];
+//       // _data.push(this.sampleSpeaker);
+// _data.push("Kiwi")
+      console.log(this.form);
+      // console.log(_data);
     },
     //======loading======
     beginLoad() {
@@ -111,8 +156,11 @@ export default {
 };
 </script>
 <style>
-.el-textarea,
+/* .el-textarea,
 .el-input {
   width: 500px;
+} */
+.small-input .el-input {
+  width: 160px;
 }
 </style>

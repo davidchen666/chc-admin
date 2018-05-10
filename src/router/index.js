@@ -284,6 +284,23 @@ export const constantRouterMap = [
     ]
   },
 
+  //精品投行
+  {
+    path: '/banking',
+    component: Layout,
+    redirect: '/banking/registerList',
+    name: 'Banking',
+    meta: { title: '精品投行管理', icon: 'example' },
+    children: [
+      {
+        path: 'registerList',
+        name: 'BankingList',
+        component: () => import('@/views/banking/registerList'),
+        meta: { title: '精品投行报名表', icon: 'table' }
+      },
+    ]
+  },
+
   //咨询服务
   {
     path: '/services',

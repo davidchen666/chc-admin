@@ -4,9 +4,19 @@
       <el-row>
         <el-col :span="6"><el-input placeholder="输入关键字，按回车键搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData(currentPage = 1)"/></el-col>
         <el-col :span="4">
-          <el-select v-model="listQuery.status" placeholder="状态" @change="fetchData(currentPage = 1)">
+          <el-select v-model="listQuery.status" placeholder="新闻状态" @change="fetchData(currentPage = 1)">
             <el-option
               v-for="item in userStatus"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-select v-model="listQuery.newstype" placeholder="新闻类型" @change="fetchData(currentPage = 1)">
+            <el-option
+              v-for="item in typeStatus"
               :key="item.value"
               :label="item.label"
               :value="item.value">
@@ -31,6 +41,12 @@
       <el-table-column label="新闻标题" align="center">
         <template slot-scope="scope">
           {{scope.row.news_title}}
+        </template>
+      </el-table-column>
+      <el-table-column class-name="status-col" label="新闻类型" width="100" align="center" >
+        <template slot-scope="scope">
+          <span v-if="scope.row.news_type == '1'" >产品联盟 </span>
+          <span v-if="scope.row.news_type == '2'" >医疗传媒 </span>
         </template>
       </el-table-column>
       <el-table-column label="新闻作者" align="center">
@@ -101,7 +117,8 @@ export default {
       listLoading: true,
       listQuery: {
         searchVal: "",
-        status: ""
+        status: "",
+        newstype: ""
       },
       currentPage: 1,
       pageSize: 10,
@@ -109,7 +126,7 @@ export default {
       userStatus: [
         {
           value: "",
-          label: "全部"
+          label: "全部新闻状态"
         },
         {
           value: "1",
@@ -118,6 +135,20 @@ export default {
         {
           value: "-1",
           label: "下线"
+        }
+      ],
+      typeStatus: [
+        {
+          value: "",
+          label: "全部新闻类型"
+        },
+        {
+          value: "1",
+          label: "产品联盟"
+        },
+        {
+          value: "2",
+          label: "医疗传媒"
         }
       ],
       showType: null,
