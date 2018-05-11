@@ -2,22 +2,22 @@
     <div class="app-container">
         <el-form ref="form" :model="form" label-width="120px">
             <el-form-item label="主办方">
-                <el-select v-model="form.events_organizer_organizer" multiple placeholder="请选择">
+                <el-select v-model="form.events_organizer_organizer" multiple filterable remote reserve-keyword placeholder="请输入关键词" :loading="searchLoading" :remote-method="fetchList">
                     <el-option v-for="item in listData" :key="item.media_id" :value="item.media_id" :label="item.media_name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="协办方">
-                <el-select v-model="form.events_organizer_co_organizer" multiple placeholder="请选择">
+                <el-select v-model="form.events_organizer_co_organizer" multiple filterable remote reserve-keyword placeholder="请输入关键词" :loading="searchLoading" :remote-method="fetchList">
                     <el-option v-for="item in listData" :key="item.media_id" :value="item.media_id" :label="item.media_name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="战略伙伴">
-                <el-select v-model="form.events_organizer_starategic_partner" multiple placeholder="请选择">
+                <el-select v-model="form.events_organizer_starategic_partner" multiple filterable remote reserve-keyword placeholder="请输入关键词" :loading="searchLoading" :remote-method="fetchList">
                     <el-option v-for="item in listData" :key="item.media_id" :value="item.media_id" :label="item.media_name"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item label="媒体支持">
-                <el-select v-model="form.events_organizer_media_support" multiple placeholder="请选择">
+                <el-select v-model="form.events_organizer_media_support" multiple filterable remote reserve-keyword placeholder="请输入关键词" :loading="searchLoading" :remote-method="fetchList">
                     <el-option v-for="item in listData" :key="item.media_id" :value="item.media_id" :label="item.media_name"></el-option>
                 </el-select>
             </el-form-item>
@@ -37,6 +37,7 @@ export default{
             currentRouter: '',
             listLoading: false,
             allLoading: '',
+            searchLoading: false,
             listData: [],
             queryData: 'events_organizer_organizer,events_organizer_co_organizer,events_organizer_starategic_partner,events_organizer_media_support',
             form: {
@@ -50,15 +51,17 @@ export default{
     },
     created(){
         this.currentRouter = this.$route.name;
-        this.fetchList();
+        this.fetchList('');
         this.getDetail(this.$route.query.events_id);
     },
     methods:{
-        fetchList() {
-            let paramsData = {currentPage:1,pageSize:100};
+        fetchList(searchVal) {
+            let paramsData = {currentPage:1,pageSize:100,searchVal:searchVal};
+            this.searchLoading = true;
             getMediaList(paramsData).then(response => {
                 this.listData = response.resData.items
                 // console.log(this.listData);
+                this.searchLoading = false;
             })
         },
         getDetail(events_id) {

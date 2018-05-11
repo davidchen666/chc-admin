@@ -13,7 +13,7 @@
         <el-col :span="3"><el-button icon="el-icon-search" @click="fetchData(currentPage = 1)">搜索</el-button></el-col>
         <el-col :span="6">
           <router-link to="add">
-            <el-button type="success"> 下载excel</el-button>
+            <el-button type="success" @click="exportCsv"> 下载数据 </el-button>
           </router-link>
         </el-col>
       </el-row>
@@ -146,6 +146,7 @@
 
 <script>
 import { getEventsRegisterList, getEventsList, editEventsRegister } from '@/api/fetch'
+import CsvExportor from 'csv-exportor'
 
 export default {
   data() {
@@ -251,6 +252,25 @@ export default {
         }
         this.allLoading.close();
       })
+    },
+    exportCsv() {
+      this.listQuery.currentPage = this.currentPage;
+      this.listQuery.pageSize = this.pageSize;
+      let myParams = {
+        currentPage: 1,
+        pageSize: this.totalData,
+        searchVal: this.listQuery.searchVal,
+        events_id: this.listQuery.events_id
+      };
+
+      let tableData = '';
+      let header = ['报名ID', '公司名称', '报名人姓名', '公司发票抬头', '公司税号', '电话', '传真', '邮政地址', '邮编', '付费价格', '付费渠道', '发票', '备注'];
+      getEventsRegisterList(this.myParams).then(response => {
+        tableData = response.resData.items
+        CsvExportor.downloadCsv(tableData, { header }, '报名表.csv');
+      })
+      // let tableData = [["a","b","c"],["d","e","f"]];
+      
     }
     //更改状态
     // changeState(dData,needState){

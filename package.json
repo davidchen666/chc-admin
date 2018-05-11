@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "0.17.1",
+    "csv-exportor": "^1.0.2",
     "element-ui": "2.3.4",
     "js-cookie": "2.2.0",
     "normalize.css": "7.0.0",

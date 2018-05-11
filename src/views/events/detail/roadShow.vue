@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-form ref="form" :model="form" label-width="120px">
             <el-form-item label="关联路演项目">
-                <el-select v-model="form.events_road_id" placeholder="请选择">
+                <el-select v-model="form.events_road_id" clearable placeholder="请选择">
                     <el-option v-for="item in listData" :key="item.road_id" :value="item.road_id" :label="item.road_name"></el-option>
                 </el-select>
             </el-form-item>
