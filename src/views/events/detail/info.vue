@@ -4,9 +4,15 @@
       <el-form-item label="会议标题">
         <el-input v-model="form.events_name" placeholder="会议标题"></el-input>
       </el-form-item>
-      <el-form-item label="会议URL" v-if="currentRouter === 'EventsDetail'">
+      <el-form-item label="会议URL(默认)" v-if="currentRouter === 'EventsDetail'">
         <!-- <el-input v-model="form.events_url" placeholder="会议URL 自动生成" :disabled="true"></el-input> -->
         <a :href="baseUrl+this.$route.query.events_id" target="_blank">{{baseUrl+this.$route.query.events_id}}</a>
+      </el-form-item>
+      <el-form-item label="会议URL(自定义)" v-if="currentRouter === 'EventsDetail'">
+        <el-input placeholder="请输入内容" v-model="form.events_url">
+          <template slot="prepend">{{headerUrl}}</template>
+        </el-input>
+        <el-button type="primary" icon="el-icon-document" size="mini" @click="copyData"  class="copyBtn" :data-clipboard-text = "headerUrl + form.events_url">复制</el-button>
       </el-form-item>
       <el-form-item label="会议日期">
         <el-date-picker v-model="events_date" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="changeDate"></el-date-picker>
@@ -70,6 +76,8 @@
 <script>
 import { getEventsList, addEvents, editEvents, getEventsMenuList } from '@/api/fetch'
 import { formatDate } from '@/utils/index'
+import Clipboard from 'clipboard';
+let clipboard = new Clipboard('.copyBtn');
 export default {
   data() {
     return {
@@ -78,6 +86,7 @@ export default {
       currentRouter: '',
       uploadUrl: '',
       baseUrl:'',
+      headerUrl:'',
       eventsPicList:[],
       eventsMultiple: false,
       eventsPicLimit: 1,
@@ -97,6 +106,7 @@ export default {
           past_title: '',
           events_menu: ['1','2','3','4','5','6','7','8'],
           events_remark: '',
+          events_url: '',
           events_state: '-1'
       }
     }
@@ -104,6 +114,7 @@ export default {
   created(){
     this.uploadUrl = process.env.BASE_API + '?m=events&a=uploadFile';
     this.baseUrl = process.env.BASE_URL + '?m=events&a=detail&events_id=';
+    this.headerUrl = process.env.BASE_URL + 'events/';
     this.init();
   },
   watch: {
@@ -141,6 +152,7 @@ export default {
           past_title:'',
           events_menu: ['1','2','3','4','5','6','7','8'],
           events_remark: '',
+          events_url: '',
           events_state: '-1'
       };
       }
@@ -314,8 +326,9 @@ export default {
       }
       //编辑
       if(this.currentRouter === 'EventsDetail'){
+        this.form.url = this.baseUrl+this.$route.query.events_id;
         editEvents(this.form).then(response => {
-          console.log(response)
+          // console.log(response)
           if(response && response.resCode === 200 && response.resData){
             this.$message({
               message: '修改成功。',
@@ -331,6 +344,12 @@ export default {
     },
     onCancel() {
       history.go(-1);
+    },
+    copyData(){
+      this.$message({
+        message: '复制成功。',
+        type: 'success'
+      });
     }
   }
 }

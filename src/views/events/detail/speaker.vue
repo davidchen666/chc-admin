@@ -19,15 +19,19 @@
                 </el-select>
             </el-form-item> -->
 
+            <el-form-item label="会议首页显示">
+                <el-select v-model="form.events_speaker_simple" @focus="currentKey=-1" multiple filterable remote reserve-keyword placeholder="请输入关键词" :loading="searchLoading" :remote-method="fetchSpeakerList">
+                  <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
+                </el-select>
+                <span>*显示于会议首页，若不添加，则首页不显示嘉宾</span>
+            </el-form-item>
+
             <el-form-item label="嘉宾类目" v-for="(val,key) in form.events_speaker" :key="key">
               <el-col :span="4" class="small-input">
                 <el-input :placeholder="key" v-model="form.events_speaker[key].speaker_type"></el-input>
               </el-col>
               <el-col class="line" :span="2" style="text-align: center;">嘉宾人员</el-col>
               <el-col :span="11">
-                <!-- <el-select v-model="form.speaker[key].speaker_data" multiple placeholder="请选择">
-                  <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
-                </el-select> -->
                 <el-select v-model="form.events_speaker[key].speaker_data" @focus="currentKey=key" multiple filterable remote reserve-keyword placeholder="请输入关键词" :loading="searchLoading" :remote-method="fetchSpeakerList">
                   <el-option v-for="item in speakerList" :key="item.speaker_id" :value="item.speaker_id" :label="item.speaker_name"></el-option>
                 </el-select>
@@ -62,7 +66,7 @@ export default {
       addSpeakerData: "",
       speakerList: [],
       // queryData: "events_speaker_main,events_speaker_invite",
-      queryData: "events_speaker",
+      queryData: "events_speaker,events_speaker_simple",
       // sampleSpeaker: {
       //   id: 0,
       //   speaker_type: "",
@@ -72,6 +76,7 @@ export default {
         events_id: "",
         // events_speaker_main: [],
         // events_speaker_invite: [],
+        events_speaker_simple: [],
         events_speaker: [
           {
             speaker_type: "",
@@ -85,9 +90,10 @@ export default {
   },
   created() {
     this.currentRouter = this.$route.name;
-    
     this.fetchSpeakerList('');
-    this.getDetail(this.$route.query.events_id);
+    if (this.currentRouter === "EventsDetail") {
+      this.getDetail(this.$route.query.events_id);
+    }
   },
   methods: {
     fetchSpeakerList(searchVal) {
@@ -132,6 +138,9 @@ export default {
           
           if(response.resData.items[0].events_speaker){
             this.form.events_speaker = JSON.parse(response.resData.items[0].events_speaker);
+          }
+          if(response.resData.items[0].events_speaker_simple){
+            this.form.events_speaker_simple = JSON.parse(response.resData.items[0].events_speaker_simple);
           }
           // console.log('form-----',this.form);
         }

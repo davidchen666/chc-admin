@@ -10,7 +10,7 @@
             </el-form-item>
             <el-form-item label="内容(简化)">
                 <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content_simple"> </el-input>
-                <span>显示于首页，若不填写，首页将显示完全版。回车换行新增，格式如 9:00-9:10->会议签到</span>
+                <span>显示于首页，若不填写，首页将不显示会议日程。回车换行新增，格式如 9:00-9:10->会议签到</span>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="saveInfo">保存</el-button>
@@ -38,7 +38,9 @@ export default {
   },
   created() {
     this.currentRouter = this.$route.name;
-    this.getDetail(this.$route.query.events_id);
+    if (this.currentRouter === "EventsDetail") {
+      this.getDetail(this.$route.query.events_id);
+    }
   },
   methods: {
     getDetail(events_id) {

@@ -12,9 +12,7 @@
         </el-col>
         <el-col :span="3"><el-button icon="el-icon-search" @click="fetchData(currentPage = 1)">搜索</el-button></el-col>
         <el-col :span="6">
-          <router-link to="add">
-            <el-button type="success" @click="exportCsv"> 下载数据 </el-button>
-          </router-link>
+          <el-button type="success" @click="downData"> 下载数据 </el-button>
         </el-col>
       </el-row>
     </div>
@@ -253,7 +251,19 @@ export default {
         this.allLoading.close();
       })
     },
+    downData(){
+      this.$confirm('此操作将下载报名表,请使用主流浏览器（chrome、firefox、360等,不要使用IE），时间可能较长，请耐心等待， 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.exportCsv();
+      }).catch(() => {
+               
+      });
+    },
     exportCsv() {
+      this.beginLoad();
       this.listQuery.currentPage = this.currentPage;
       this.listQuery.pageSize = this.pageSize;
       let myParams = {
@@ -262,12 +272,28 @@ export default {
         searchVal: this.listQuery.searchVal,
         events_id: this.listQuery.events_id
       };
-
       let tableData = '';
-      let header = ['报名ID', '公司名称', '报名人姓名', '公司发票抬头', '公司税号', '电话', '传真', '邮政地址', '邮编', '付费价格', '付费渠道', '发票', '备注'];
+      let header = ['报名ID', '会议ID','会议名称','公司名称', '公司发票抬头', '公司税号', '电话', '传真', '邮政地址', '邮编', '付费价格', '付费渠道', '发票状态', '备注','报名时间','更新时间',
+      '报名人姓名','报名人电话','报名职位','报名人邮箱'];
       getEventsRegisterList(this.myParams).then(response => {
-        tableData = response.resData.items
-        CsvExportor.downloadCsv(tableData, { header }, '报名表.csv');
+        let totalTableData = [];
+        response.resData.items.forEach((element,index) => {
+         if(element.users && element.users.length>0){
+            element.users.forEach((val,key) => {
+              totalTableData.push([element.com_id,element.events_id,element.events_name,element.com_name,
+              element.com_invoices_title,element.com_duty_num,element.com_phone,element.com_fax,
+              element.com_postal_addr,element.com_postal_code,element.pay_price,element.pay_method,element.invoice_state == 1 ? '已开':'未开',
+              element.remark,element.create_date,element.update_date,val.user_name,val.user_mobile,val.user_job,val.user_email]);
+            });
+          }
+        });
+        // console.log(totalTableData);
+        CsvExportor.downloadCsv(totalTableData, { header }, '报名表.csv');
+        this.allLoading.close();
+        this.$message({
+          type: 'success',
+          message: '下载成功!'
+        });
       })
       // let tableData = [["a","b","c"],["d","e","f"]];
       

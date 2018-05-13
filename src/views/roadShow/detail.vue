@@ -4,6 +4,9 @@
       <el-form-item label="路演项目名称">
         <el-input v-model="form.road_name" placeholder="路演项目名称"></el-input>
       </el-form-item>
+      <el-form-item label="项目日期">
+        <el-date-picker v-model="road_date" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="changeDate"></el-date-picker>
+      </el-form-item>
       <el-form-item label="项目标题">
         <el-input v-model="form.road_title" placeholder="项目标题"></el-input>
       </el-form-item>
@@ -11,7 +14,8 @@
         <el-input v-model="form.road_second_title" placeholder="项目副标题"></el-input>
       </el-form-item>
       <el-form-item label="项目介绍">
-        <el-input type="textarea" autosize placeholder="项目介绍" v-model="form.road_intro"> </el-input>
+        <!-- <el-input type="textarea" autosize placeholder="项目介绍" v-model="form.road_intro"> </el-input> -->
+        <UE :defaultMsg=form.road_intro :config=config :id=roadInfo :ref=roadInfo></UE>
       </el-form-item>
       <el-form-item label="活动宗旨">
         <el-input type="textarea" autosize placeholder="活动宗旨" v-model="form.road_target"> </el-input>
@@ -27,6 +31,9 @@
       </el-form-item>
       <el-form-item label="您将获得">
         <el-input type="textarea" autosize placeholder="" v-model="form.road_achieve"> </el-input>
+      </el-form-item>
+      <el-form-item label="报名注意事项">
+        <el-input type="textarea" autosize placeholder="" v-model="form.road_warn"> </el-input>
       </el-form-item>
       <el-form-item label="是否上线"  v-loading.body="listLoading" element-loading-text="加载中">
         <el-radio v-model="form.road_state" label="1">上线</el-radio>
@@ -45,7 +52,12 @@
 
 <script>
 import { getRoadShowList, addRoadShow, editRoadShow } from '@/api/fetch'
+import { formatDate } from '@/utils/index'
+import UE from "../../components/Helper/uedit.vue";
 export default {
+  components: {
+    UE
+  },
   data() {
     return {
       allLoading: '',
@@ -53,6 +65,7 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       currentRouter: '',
+      road_date:[],
       //road_id,road_name,road_title,road_second_title,road_intro,road_target road_guide,road_course,
       //road_signup_intro,road_achieve,road_remark,create_date,update_date,road_state
       form: {
@@ -66,9 +79,17 @@ export default {
         road_course: '',
         road_signup_intro: '',
         road_achieve: '',
+        road_warn: '',
+        road_begin_date:'',
+        road_end_date:'',
         road_state: '1',
         road_remark: ''
-      }
+      },
+      config: {
+        initialFrameWidth: null,
+        initialFrameHeight: 250
+      },
+      roadInfo: "roadInfo" // 不同编辑器必须不同的id
     }
   },
   created(){
@@ -106,9 +127,13 @@ export default {
           road_course: '',
           road_signup_intro: '',
           road_achieve: '',
+          road_warn: '',
+          road_begin_date:'',
+          road_end_date:'',
           road_state: '1',
           road_remark: ''
-        }
+        };
+        this.road_date = [];
       }
       
     },
@@ -119,10 +144,45 @@ export default {
         // console.log(response);
         if(response.resCode === 200){
           this.form =  response.resData.items[0];
+          if(this.form.road_begin_date && this.form.road_end_date){
+            this.road_date = [this.form.road_begin_date,this.form.road_end_date]
+          }
+          this.setUEContent(this.roadInfo, this.form.road_intro);
         }
       })
     },
-
+    changeDate(){
+      if(this.road_date && this.road_date.length === 2){
+        this.form.road_begin_date = formatDate(this.road_date[0]);
+        this.form.road_end_date = formatDate(this.road_date[1]);
+      }
+    },
+    //======== ueditor 编辑器 =======
+    getUEContent(name) {
+      // let content = this.$refs.ue.getUEContent(); // 调用子组件方法
+      let content = this.$refs[name].getUEContent(); // 调用子组件方法
+      // this.$notify({
+      //   title: '获取成功，可在控制台查看！',
+      //   message: content,
+      //   type: 'success'
+      // });
+      // console.log(content)
+      return content;
+    },
+    getUEContentTxt(obj) {
+      // let content = this.$refs.ue.getUEContentTxt(); // 调用子组件方法
+      this.$notify({
+        title: "获取成功，可在控制台查看！",
+        message: content,
+        type: "success"
+      });
+      console.log(content);
+    },
+    setUEContent(name, content) {
+      // let content = this.$refs.ue.getUEContent(); // 调用子组件方法
+      // let content = this.$refs[name].setUEContent(); // 调用子组件方法
+      return this.$refs[name].setUEContent(content);
+    },
     //======loading======
     beginLoad(){
       this.allLoading = this.$loading({
@@ -135,6 +195,7 @@ export default {
     //======submit======
     onSubmit() {
       this.beginLoad()
+      this.form.road_intro = this.getUEContent(this.roadInfo);
       //添加
       if(this.currentRouter === 'RoadShowAdd'){
         addRoadShow(this.form).then(response => {

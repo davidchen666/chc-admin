@@ -26,6 +26,11 @@
       <el-form-item label="媒体简介">
         <el-input type="textarea" autosize placeholder="媒体简介" v-model="form.media_intro" > </el-input>
       </el-form-item>
+      <el-form-item label="媒体网站">
+        <el-input placeholder="请输入内容" v-model="form.media_url">
+          <template slot="prepend">Http://</template>
+        </el-input>
+      </el-form-item>
       <el-form-item label="备注信息">
         <el-input type="textarea" autosize placeholder="备注信息" v-model="form.media_remark"> </el-input>
       </el-form-item>
@@ -58,6 +63,7 @@ export default {
         media_company: '',
         media_company_simple: '',
         media_intro: '',
+        media_url: '',
         media_pic: '',
         media_detail_intro: '',
         media_state: '1',
@@ -99,6 +105,7 @@ export default {
           media_company: '',
           media_company_simple: '',
           media_intro: '',
+          media_url: '',
           media_pic: '',
           media_detail_intro: '',
           media_state: '1',

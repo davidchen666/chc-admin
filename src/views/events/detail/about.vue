@@ -3,10 +3,11 @@
         <el-form ref="form" :model="form" label-width="120px">
             <el-form-item label="关于会议">
                 <el-input type="textarea" placeholder="请输入关于会议内容" autosize v-model="form.events_about"> </el-input>
+                <span>简化版本，用于显示关于会议页</span>
             </el-form-item>
             <el-form-item label="关于会议(简化)">
                 <el-input type="textarea" autosize placeholder="请输入关于会议内容" v-model="form.events_about_simple"> </el-input>
-                <span>简化版本，用于显示会议首页，不输入不输入表示显示以上内容</span>
+                <span>简化版本，用于显示会议首页，不输入表示会议首页不显示关于会议</span>
             </el-form-item>
             <el-form-item label="邀请企业">
                 <el-input type="textarea" autosize placeholder="请输入邀请企业，回车输入多个" v-model="form.events_about_invite_company"> </el-input>
@@ -44,7 +45,9 @@ export default {
   },
   created() {
     this.currentRouter = this.$route.name;
-    this.getDetail(this.$route.query.events_id);
+    if (this.currentRouter === "EventsDetail") {
+      this.getDetail(this.$route.query.events_id);
+    }
   },
   methods: {
     getDetail(events_id) {

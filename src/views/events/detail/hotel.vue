@@ -33,7 +33,9 @@ export default {
   created() {
     this.currentRouter = this.$route.name;
     this.fetchList();
-    this.getDetail(this.$route.query.events_id);
+    if (this.currentRouter === "EventsDetail") {
+      this.getDetail(this.$route.query.events_id);
+    }
   },
   methods: {
     fetchList() {

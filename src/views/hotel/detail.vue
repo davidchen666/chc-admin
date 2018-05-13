@@ -11,7 +11,7 @@
       <el-form-item label="酒店介绍">
         <UE :defaultMsg=form.hotel_info :config=config :id=hotelInfo :ref=hotelInfo></UE>
       </el-form-item>
-      <el-form-item label="酒店图片 (x4)">
+      <el-form-item label="酒店图片 (x8)">
         <el-upload :action="uploadUrl" list-type="picture-card" :file-list="hotelPicList" :on-error="picError" :multiple="hotelMultiple" :limit='hotelPicLimit' 
         :on-exceed="overHotelPicLimit" :on-success="hotelPicSuccess" :on-preview="handleHotelPictureCardPreview" :on-remove="handleHotelRemove">
           <i class="el-icon-plus"></i>
@@ -32,6 +32,14 @@
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-form-item> -->
+      <el-form-item label="重命名图片标题">
+        <el-input v-model="form.hotel_pic_rename" placeholder="默认显示 客房、会议室"></el-input>
+        <span>*若不填写则显示 客房、会议室</span>
+      </el-form-item>
+      <el-form-item label="重命名到达指引">
+        <el-input v-model="form.hotel_arrive_rename" placeholder="默认显示 到达指引"></el-input>
+        <span>*若不填写则显示 到达指引</span>
+      </el-form-item>
       <el-form-item label="备注信息">
         <el-input type="textarea" autosize placeholder="会议备注" v-model="form.hotel_remark" > </el-input>
       </el-form-item>
@@ -60,7 +68,7 @@ export default {
       dialogVisible: false,
       uploadUrl: '',
       currentRouter: '',
-      hotelPicLimit: 4,
+      hotelPicLimit: 8,
       hotelMultiple: true,
       arriveMultiple: true,
       arrivePicLimit: 1,
@@ -71,6 +79,8 @@ export default {
         hotel_name: '',
         hotel_state: '1',
         hotel_remark: '',
+        hotel_pic_rename: '',
+        hotel_arrive_rename: '',
         hotel_info: '',
         arrive_info: '',
         hotel_pic: [],
@@ -119,6 +129,8 @@ export default {
           hotel_name: '',
           hotel_state: '1',
           hotel_remark: '',
+          hotel_pic_rename: '',
+          hotel_arrive_rename: '',
           hotel_info: '',
           arrive_info: '',
           hotel_pic: [],
