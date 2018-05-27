@@ -65,3 +65,16 @@ export function formatDate(date){
   d = d < 10 ? ('0' + d) : d;  //判断日期是否大10
   return y + '-' + m + '-' + d;  //返回时间格式
 }
+
+export function formatDateTime(date){
+  let y = date.getFullYear();  //获取年
+  let m = date.getMonth() + 1;  //获取月
+  m = m < 10 ? '0' + m : m;  //判断月是否大于10
+  let d = date.getDate();  //获取日
+  d = d < 10 ? ('0' + d) : d;  //判断日期是否大10
+  let h = date.getHours();  //获取小时
+  h = h < 10 ? ('0' + h) : h;
+  let mi = date.getMinutes();  //获取分钟
+  mi = mi < 10 ? ('0' + mi) : mi;
+  return y + '-' + m + '-' + d + ' ' + h + ':' + mi;  //返回时间格式
+}

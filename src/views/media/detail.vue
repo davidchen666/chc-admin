@@ -1,10 +1,10 @@
 <template>
   <div class="app-container" v-loading.body="listLoading">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="媒体名称">
-        <el-input v-model="form.media_name" placeholder="媒体名称"></el-input>
+      <el-form-item label="组织机构名称">
+        <el-input v-model="form.media_name" placeholder="组织机构名称"></el-input>
       </el-form-item>
-      <el-form-item label="媒体LOGO(x1)">
+      <el-form-item label="组织机构LOGO(x1)">
         <el-upload :action="uploadUrl" list-type="picture-card" :file-list="mediaPicList" :on-error="picError" :multiple="mediaMultiple" :limit='mediaPicLimit' 
         :on-exceed="overMediaPicLimit" :on-success="mediaPicSuccess" :on-preview="handleMediaPictureCardPreview" :on-remove="handleMediaRemove">
           <i class="el-icon-plus"></i>
@@ -23,10 +23,10 @@
         <el-radio v-model="form.media_state" label="1">上线</el-radio>
         <el-radio v-model="form.media_state" label="-1">不上线</el-radio>
       </el-form-item>
-      <el-form-item label="媒体简介">
-        <el-input type="textarea" autosize placeholder="媒体简介" v-model="form.media_intro" > </el-input>
+      <el-form-item label="组织机构简介">
+        <el-input type="textarea" autosize placeholder="组织机构简介" v-model="form.media_intro" > </el-input>
       </el-form-item>
-      <el-form-item label="媒体网站">
+      <el-form-item label="组织机构网站">
         <el-input placeholder="请输入内容" v-model="form.media_url">
           <template slot="prepend">Http://</template>
         </el-input>

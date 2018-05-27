@@ -5,7 +5,7 @@
         <el-input v-model="form.road_name" placeholder="路演项目名称"></el-input>
       </el-form-item>
       <el-form-item label="项目日期">
-        <el-date-picker v-model="road_date" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="changeDate"></el-date-picker>
+        <el-date-picker v-model="road_date" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" @change="changeDate"></el-date-picker>
       </el-form-item>
       <el-form-item label="项目标题">
         <el-input v-model="form.road_title" placeholder="项目标题"></el-input>
@@ -39,6 +39,26 @@
         <el-radio v-model="form.road_state" label="1">上线</el-radio>
         <el-radio v-model="form.road_state" label="-1">不上线</el-radio>
       </el-form-item>
+      <el-form-item label="重命名活动宗旨">
+        <el-input type="textarea" autosize placeholder="默认显示 活动宗旨" v-model="form.road_target_rename"> </el-input>
+        <span>*若不填写则显示 活动宗旨</span>
+      </el-form-item>
+      <el-form-item label="重命名专业指导">
+        <el-input type="textarea" autosize placeholder="默认显示 专业指导" v-model="form.road_guide_rename"> </el-input>
+        <span>*若不填写则显示 专业指导</span>
+      </el-form-item>
+      <el-form-item label="重命名课程安排">
+        <el-input type="textarea" autosize placeholder="默认显示 课程安排" v-model="form.road_course_rename"> </el-input>
+        <span>*若不填写则显示 课程安排</span>
+      </el-form-item>
+      <el-form-item label="重命名路演项目报名">
+        <el-input type="textarea" autosize placeholder="默认显示 路演项目报名" v-model="form.road_signup_intro_rename"> </el-input>
+        <span>*若不填写则显示 路演项目报名</span>
+      </el-form-item>
+      <el-form-item label="重命名您将获得">
+        <el-input type="textarea" autosize placeholder="默认显示 您将获得" v-model="form.road_achieve_rename"> </el-input>
+        <span>*若不填写则显示 您将获得</span>
+      </el-form-item>
       <el-form-item label="备注信息">
         <el-input type="textarea" autosize placeholder="备注信息" v-model="form.road_remark"> </el-input>
       </el-form-item>
@@ -52,7 +72,7 @@
 
 <script>
 import { getRoadShowList, addRoadShow, editRoadShow } from '@/api/fetch'
-import { formatDate } from '@/utils/index'
+import { formatDateTime } from '@/utils/index'
 import UE from "../../components/Helper/uedit.vue";
 export default {
   components: {
@@ -79,6 +99,11 @@ export default {
         road_course: '',
         road_signup_intro: '',
         road_achieve: '',
+        road_target_rename: '',
+        road_guide_rename: '',
+        road_course_rename: '',
+        road_signup_intro_rename: '',
+        road_achieve_rename: '',
         road_warn: '',
         road_begin_date:'',
         road_end_date:'',
@@ -127,6 +152,11 @@ export default {
           road_course: '',
           road_signup_intro: '',
           road_achieve: '',
+          road_target_rename: '',
+          road_guide_rename: '',
+          road_course_rename: '',
+          road_signup_intro_rename: '',
+          road_achieve_rename: '',
           road_warn: '',
           road_begin_date:'',
           road_end_date:'',
@@ -153,8 +183,10 @@ export default {
     },
     changeDate(){
       if(this.road_date && this.road_date.length === 2){
-        this.form.road_begin_date = formatDate(this.road_date[0]);
-        this.form.road_end_date = formatDate(this.road_date[1]);
+        // console.log(this.road_date);
+        this.form.road_begin_date = formatDateTime(this.road_date[0]);
+        this.form.road_end_date = formatDateTime(this.road_date[1]);
+        // console.log(this.form);
       }
     },
     //======== ueditor 编辑器 =======

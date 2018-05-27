@@ -158,31 +158,31 @@ export const constantRouterMap = [
     ]
   },
 
-  //媒体管理
+  //组织机构管理
   {
     path: '/media',
     component: Layout,
     redirect: '/media/list',
     name: 'Media',
-    meta: { title: '媒体管理', icon: 'example' },
+    meta: { title: '组织机构管理', icon: 'example' },
     children: [
       {
         path: 'list',
         name: 'MediaList',
         component: () => import('@/views/media/index'),
-        meta: { title: '媒体列表', icon: 'table' }
+        meta: { title: '组织机构列表', icon: 'table' }
       },
       {
         path: 'add',
         name: 'MediaAdd',
         component: () => import('@/views/media/detail'),
-        meta: { title: '添加媒体', icon: 'tree' }
+        meta: { title: '添加组织机构', icon: 'tree' }
       },
       {
         path: 'detail',
         name: 'MediaDetail',
         component: () => import('@/views/media/detail'),
-        meta: { title: '媒体详情', icon: 'table' },
+        meta: { title: '组织机构详情', icon: 'table' },
         hidden: true
       },
     ]
@@ -284,6 +284,23 @@ export const constantRouterMap = [
     ]
   },
 
+  //产业联盟
+  {
+    path: '/alliance',
+    component: Layout,
+    redirect: '/alliance/registerList',
+    name: 'Alliance',
+    meta: { title: '产业联盟管理', icon: 'example' },
+    children: [
+      {
+        path: 'registerList',
+        name: 'AllianceRegisterList',
+        component: () => import('@/views/alliance/registerList'),
+        meta: { title: '产业联盟报名表', icon: 'table' }
+      },
+    ]
+  },
+
   //精品投行
   {
     path: '/banking',
@@ -294,7 +311,7 @@ export const constantRouterMap = [
     children: [
       {
         path: 'registerList',
-        name: 'BankingList',
+        name: 'BankingRegisterList',
         component: () => import('@/views/banking/registerList'),
         meta: { title: '精品投行报名表', icon: 'table' }
       },

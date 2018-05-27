@@ -245,6 +245,16 @@ export function editNewsState(params) {
   })
 }
 
+//======================== alliance ===========================
+//产业联盟报名申请表
+export function getAllianceRegisterList(params) {
+  return request({
+    url: '?m=alliance&a=getAllianceRegisterList',
+    method: 'post',
+    data: params
+  })
+}
+
 //======================== banking ===========================
 //精准投行报名表
 export function getBankingRegisterList(params) {

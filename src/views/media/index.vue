@@ -16,7 +16,7 @@
         <el-col :span="3"><el-button icon="el-icon-search" @click="fetchData(currentPage = 1)">搜索</el-button></el-col>
         <el-col :span="6">
           <router-link to="add">
-            <el-button type="success"> 添加媒体</el-button>
+            <el-button type="success"> 添加组织机构</el-button>
           </router-link>
         </el-col>
       </el-row>
@@ -28,7 +28,7 @@
           {{scope.row.media_id}}
         </template>
       </el-table-column>
-      <el-table-column label="媒体名称" align="center">
+      <el-table-column label="组织机构名称" align="center">
         <template slot-scope="scope">
           {{scope.row.media_name}}
         </template>
@@ -38,7 +38,7 @@
           {{scope.row.media_company}}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="媒体状态" width="100" align="center" >
+      <el-table-column class-name="status-col" label="组织机构状态" width="100" align="center" >
         <template slot-scope="scope">
           <el-tag :type="scope.row.media_state | statusFilter">
             <span v-if="scope.row.media_state == '1'" >上线 </span>
@@ -167,7 +167,7 @@ export default {
     },
     //更改状态
     changeState(dData,needState){
-      let stateStr = dData.media_state == '1'? ' 设置为下线状态，将在会议设置中不显示该媒体':' 设置为上线状态，将在会议设置中显示该媒体';
+      let stateStr = dData.media_state == '1'? ' 设置为下线状态，将在会议设置中不显示该组织机构':' 设置为上线状态，将在会议设置中显示该组织机构';
       this.$confirm('此操作将把'+ dData.media_name + stateStr +', 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
