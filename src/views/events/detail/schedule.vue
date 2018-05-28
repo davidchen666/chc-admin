@@ -1,23 +1,23 @@
 <template>
     <div class="app-container">
-        <el-form ref="form" :model="form" label-width="120px">
-            <el-form-item label="会议日程标题">
-                <el-input placeholder="请输入会议日程标题" v-model="form.events_schedule_title"> </el-input>
-            </el-form-item>
-            <el-form-item label="内容(简化)">
-                <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content_simple"> </el-input>
-                <span>显示于首页，若不填写，首页将不显示会议日程。回车换行新增，格式如 9:00-9:10->会议签到</span>
-            </el-form-item>
-            <el-form-item label="内容(完全版)">
-                <!-- <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content"> </el-input>
-                <span>请输入关于会议日程内容，回车换行新增，格式如 9:00-9:10->会议签到</span> -->
-                <UE :defaultMsg=form.events_schedule_content :config=config :id=scheduleInfo :ref=scheduleInfo></UE>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="saveInfo">保存</el-button>
-                <el-button @click="back">返回</el-button>
-            </el-form-item>
-        </el-form>
+      <el-form ref="form" :model="form" label-width="120px">
+        <el-form-item label="会议日程标题">
+          <el-input placeholder="请输入会议日程标题" v-model="form.events_schedule_title"> </el-input>
+        </el-form-item>
+        <el-form-item label="内容(简化)">
+          <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content_simple"> </el-input>
+          <span>显示于首页，若不填写，首页将不显示会议日程。回车换行新增，格式如 9:00-9:10->会议签到</span>
+        </el-form-item>
+        <el-form-item label="内容(完全版)">
+          <!-- <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content"> </el-input>
+          <span>请输入关于会议日程内容，回车换行新增，格式如 9:00-9:10->会议签到</span> -->
+          <UE :defaultMsg=form.events_schedule_content :config=config :id=scheduleInfo :ref=scheduleInfo></UE>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="saveInfo">保存</el-button>
+          <el-button @click="back">返回</el-button>
+        </el-form-item>
+      </el-form>
     </div>
 </template>
 <script>
@@ -33,11 +33,12 @@ export default {
       currentRouter: "",
       listLoading: false,
       allLoading: "",
-      queryData: "events_schedule_title,events_schedule_content,events_schedule_content_simple",
+      queryData:
+        "events_schedule_title,events_schedule_content,events_schedule_content_simple",
       form: {
         events_schedule_title: "",
         events_schedule_content: "",
-        events_schedule_content_simple: "",
+        events_schedule_content_simple: ""
       },
       scheduleInfo: "scheduleInfo", // 不同编辑器必须不同的id
       config: {
@@ -64,7 +65,10 @@ export default {
         console.log(response);
         if (response.resCode === 200) {
           this.form = response.resData.items[0];
-          this.setUEContent(this.scheduleInfo, this.form.events_schedule_content);
+          this.setUEContent(
+            this.scheduleInfo,
+            this.form.events_schedule_content
+          );
         }
       });
     },
@@ -107,7 +111,9 @@ export default {
       //编辑
       if (this.currentRouter === "EventsDetail") {
         this.beginLoad();
-        this.form.events_schedule_content = this.getUEContent(this.scheduleInfo);
+        this.form.events_schedule_content = this.getUEContent(
+          this.scheduleInfo
+        );
         this.form.query = this.queryData;
         editEventsInfo(this.form).then(response => {
           // console.log(response)
