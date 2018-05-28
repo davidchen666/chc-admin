@@ -293,6 +293,12 @@ export const constantRouterMap = [
     meta: { title: '产业联盟管理', icon: 'example' },
     children: [
       {
+        path: 'members',
+        name: 'AllianceMembers',
+        component: () => import('@/views/alliance/members'),
+        meta: { title: '产业联盟成员', icon: 'table' }
+      },
+      {
         path: 'registerList',
         name: 'AllianceRegisterList',
         component: () => import('@/views/alliance/registerList'),
