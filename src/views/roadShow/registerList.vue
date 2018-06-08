@@ -144,7 +144,7 @@ export default {
     }
   },
   created() {
-    this.downUrl = process.env.BASE_TOTAL_API + 'uploads/roadShow/';
+    this.downUrl = process.env.BASE_URL + 'uploads/docFile/';
     this.fetchEventsList();
     this.fetchData();
   },

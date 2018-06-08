@@ -5,8 +5,9 @@
           <el-input placeholder="请输入会议日程标题" v-model="form.events_schedule_title"> </el-input>
         </el-form-item>
         <el-form-item label="内容(简化)">
-          <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content_simple"> </el-input>
-          <span>显示于首页，若不填写，首页将不显示会议日程。回车换行新增，格式如 9:00-9:10->会议签到</span>
+          <UE :defaultMsg=form.events_schedule_content_simple :config=config :id=scheduleSimpleInfo :ref=scheduleSimpleInfo></UE>
+          <!-- <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content_simple"> </el-input> -->
+          <!-- <span>显示于首页，若不填写，首页将不显示会议日程。回车换行新增，格式如 9:00-9:10->会议签到</span> -->
         </el-form-item>
         <el-form-item label="内容(完全版)">
           <!-- <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content"> </el-input>
@@ -41,6 +42,7 @@ export default {
         events_schedule_content_simple: ""
       },
       scheduleInfo: "scheduleInfo", // 不同编辑器必须不同的id
+      scheduleSimpleInfo: "scheduleSimpleInfo", // 不同编辑器必须不同的id
       config: {
         initialFrameWidth: null,
         initialFrameHeight: 250
@@ -68,6 +70,11 @@ export default {
           this.setUEContent(
             this.scheduleInfo,
             this.form.events_schedule_content
+          );
+          
+          this.setUEContent(
+            this.scheduleSimpleInfo,
+            this.form.events_schedule_content_simple
           );
         }
       });
@@ -113,6 +120,9 @@ export default {
         this.beginLoad();
         this.form.events_schedule_content = this.getUEContent(
           this.scheduleInfo
+        );
+        this.form.events_schedule_content_simple = this.getUEContent(
+          this.scheduleSimpleInfo
         );
         this.form.query = this.queryData;
         editEventsInfo(this.form).then(response => {
