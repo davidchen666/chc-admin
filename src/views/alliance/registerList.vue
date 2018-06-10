@@ -5,9 +5,7 @@
         <el-col :span="6"><el-input placeholder="输入关键字，按回车键搜索" v-model="listQuery.searchVal" style="width:80%" @keyup.enter.native="fetchData(currentPage = 1)"/></el-col>
         <el-col :span="3"><el-button icon="el-icon-search" @click="fetchData(currentPage = 1)">搜索</el-button></el-col>
         <el-col :span="6">
-          <router-link to="add">
-            <!-- <el-button type="success"> 下载excel</el-button> -->
-          </router-link>
+          <el-button type="success" @click="downData"> 下载数据 </el-button>
         </el-col>
       </el-row>
     </div>
@@ -45,7 +43,11 @@
       </el-table-column>
       <el-table-column align="center" label="公司从事业务">
         <template slot-scope="scope">
-          <span>{{scope.row.com_business}}</span>
+          <el-popover placement="top-start" title="公司从事业务" width="200" trigger="hover" :content="scope.row.com_business">
+            <span slot="reference">
+              {{scope.row.com_business.length<= 28 ?scope.row.com_business:scope.row.com_business.substring(0,28) + '...'}}
+            </span>
+          </el-popover>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="报名时间" width="180">
@@ -86,6 +88,7 @@
 
 <script>
 import { getAllianceRegisterList } from '@/api/fetch'
+import CsvExportor from 'csv-exportor'
 
 export default {
   data() {
@@ -149,6 +152,53 @@ export default {
       this.currentPage = val;
       this.fetchData();
     },
+    beginLoad(){
+      this.allLoading = this.$loading({
+        lock: true,
+        text: '请稍等,请求中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
+    },
+    downData(){
+      this.$confirm('此操作将下载报名表,请使用主流浏览器（chrome、firefox、360等,不要使用IE），时间可能较长，请耐心等待， 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.exportCsv();
+      }).catch(() => {
+               
+      });
+    },
+    exportCsv() {
+      this.beginLoad();
+      this.listQuery.currentPage = this.currentPage;
+      this.listQuery.pageSize = this.pageSize;
+      let myParams = {
+        currentPage: 1,
+        pageSize: this.totalData,
+        searchVal: this.listQuery.searchVal
+      };
+      let tableData = '';
+      let header = ['报名ID','公司名称', '联系人姓名', '职务', '电话/手机', '邮箱','报名时间', '公司从事业务'];
+      getAllianceRegisterList(myParams).then(response => {
+        let totalTableData = [];
+        // totalTableData = response.resData.items;
+        response.resData.items.forEach(element => {
+          totalTableData.push({id:element.id,com_name:element.com_name,user_name:element.user_name,user_job:element.user_job,user_mobile:element.user_mobile,user_email:element.user_email,create_date:element.create_date,com_business:element.com_business});
+        });
+        console.log(totalTableData);
+        CsvExportor.downloadCsv(totalTableData, { header }, '报名表.csv');
+        this.allLoading.close();
+        this.$message({
+          type: 'success',
+          message: '下载成功!'
+        });
+      })
+      // let tableData = [["a","b","c"],["d","e","f"]];
+      
+    }
   }
 }
 </script>

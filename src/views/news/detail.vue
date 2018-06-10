@@ -5,8 +5,8 @@
         <el-input v-model="form.news_title" placeholder=""></el-input>
       </el-form-item>
       <el-form-item label="新闻类型"  v-loading.body="listLoading" element-loading-text="加载中">
-        <el-radio v-model="form.news_type" label="1">产品联盟</el-radio>
-        <el-radio v-model="form.news_type" label="2">医疗传媒</el-radio>
+        <el-radio v-model="form.news_type" label="1">医疗传媒</el-radio>
+        <el-radio v-model="form.news_type" label="2">行业新闻</el-radio>
       </el-form-item>
       <el-form-item label="新闻缩略图(x1)">
         <el-upload :action="uploadUrl" list-type="picture-card" :file-list="newsPicList" :on-error="picError" :multiple="newsMultiple" :limit='newsPicLimit' 

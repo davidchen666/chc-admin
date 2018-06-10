@@ -45,8 +45,8 @@
       </el-table-column>
       <el-table-column class-name="status-col" label="新闻类型" width="100" align="center" >
         <template slot-scope="scope">
-          <span v-if="scope.row.news_type == '1'" >产品联盟 </span>
-          <span v-if="scope.row.news_type == '2'" >医疗传媒 </span>
+          <span v-if="scope.row.news_type == '1'" >联盟新闻 </span>
+          <span v-if="scope.row.news_type == '2'" >行业新闻 </span>
         </template>
       </el-table-column>
       <el-table-column label="新闻作者" align="center">

@@ -275,7 +275,7 @@ export default {
       let tableData = '';
       let header = ['报名ID', '会议ID','会议名称','公司名称', '公司发票抬头', '公司税号', '电话', '传真', '邮政地址', '邮编', '付费价格', '付费渠道', '发票状态', '备注','报名时间','更新时间',
       '报名人姓名','报名人电话','报名职位','报名人邮箱'];
-      getEventsRegisterList(this.myParams).then(response => {
+      getEventsRegisterList(myParams).then(response => {
         let totalTableData = [];
         response.resData.items.forEach((element,index) => {
          if(element.users && element.users.length>0){
