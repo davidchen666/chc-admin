@@ -4,6 +4,10 @@
         <el-form-item label="会议日程标题">
           <el-input placeholder="请输入会议日程标题" v-model="form.events_schedule_title"> </el-input>
         </el-form-item>
+        <el-form-item label="下载excel模板">
+           <a :href="downUrl" target="_blank"><el-button type="success">下载</el-button></a>
+           <span>*注意：下载后的文件编辑后需要调整每一行的高度一致，另存为.html的文件，用浏览器打开，然后复制浏览器的内容，再粘贴到如下编辑器中。</span>
+        </el-form-item>
         <el-form-item label="内容(简化)">
           <UE :defaultMsg=form.events_schedule_content_simple :config=config :id=scheduleSimpleInfo :ref=scheduleSimpleInfo></UE>
           <!-- <el-input type="textarea" autosize placeholder="9:00-9:10->会议签到" v-model="form.events_schedule_content_simple"> </el-input> -->
@@ -34,6 +38,7 @@ export default {
       currentRouter: "",
       listLoading: false,
       allLoading: "",
+      downUrl: "",
       queryData:
         "events_schedule_title,events_schedule_content,events_schedule_content_simple",
       form: {
@@ -54,6 +59,7 @@ export default {
     if (this.currentRouter === "EventsDetail") {
       this.getDetail(this.$route.query.events_id);
     }
+    this.downUrl = process.env.BASE_URL + 'uploads/chc_schedule.xlsx';
   },
   methods: {
     getDetail(events_id) {

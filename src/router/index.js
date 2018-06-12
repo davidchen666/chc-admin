@@ -332,12 +332,12 @@ export const constantRouterMap = [
     name: 'Services',
     meta: { title: '咨询服务', icon: 'example' },
     children: [
-      {
-        path: 'person',
-        name: 'ServicesPerson',
-        component: () => import('@/views/services/person'),
-        meta: { title: '精准人才', icon: 'table' }
-      },
+      // {
+      //   path: 'person',
+      //   name: 'ServicesPerson',
+      //   component: () => import('@/views/services/person'),
+      //   meta: { title: '精准人才', icon: 'table' }
+      // },
       {
         path: 'register',
         name: 'ServicesRegister',
