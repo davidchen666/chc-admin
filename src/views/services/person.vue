@@ -17,7 +17,7 @@
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
       </el-form-item>
-      <el-form-item label="内容">
+      <el-form-item label="内容" v-show="0">
         <UE :defaultMsg=form.content :config=config :id=aboutInfo :ref=aboutInfo></UE>
       </el-form-item>
       <el-form-item label="备注信息">
