@@ -34,7 +34,7 @@
         <el-input type="textarea" autosize placeholder="备注信息" v-model="form.speaker_remark" > </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">保存</el-button>
+        <el-button type="primary" @click="onSubmit" :disabled='btnState'>保存</el-button>
         <el-button @click="onCancel">返回</el-button>
       </el-form-item>
     </el-form>
@@ -55,6 +55,7 @@ export default {
       speakerMultiple: false,
       speakerPicLimit: 1,
       speakerPicList:[],
+      btnState: false,
       form: {
         speaker_name: '',
         speaker_pic: '',
@@ -180,6 +181,7 @@ export default {
     },
     //======submit======
     onSubmit() {
+      this.btnState = true;
       this.beginLoad()
       //添加
       if(this.currentRouter === 'SpeakerAdd'){
@@ -191,9 +193,11 @@ export default {
               type: 'success'
             });
             this.allLoading.close();
+            this.$router.push({name: 'SpeakerList'});
           }else{
             this.allLoading.close();
           }
+          this.btnState = false;
         })
       }
       //编辑
@@ -206,12 +210,15 @@ export default {
               type: 'success'
             });
             this.allLoading.close();
+            this.$router.push({name: 'SpeakerList'});
           }else{
             this.allLoading.close();
           }
+          this.btnState = false;
         })
       }
       // this.$message('submit!')
+      // this.btnState = false;
     },
     onCancel() {
       history.go(-1);

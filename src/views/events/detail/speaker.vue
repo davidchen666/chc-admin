@@ -106,7 +106,7 @@ export default {
       this.searchLoading = true;
       this.searchVal[this.currentKey] = searchVal;
       // console.log(searchVal,key);
-      let paramsData = { currentPage: 1, pageSize: 100, searchVal: this.searchVal[this.currentKey] };
+      let paramsData = { currentPage: 1, pageSize: 100, searchVal: this.searchVal[this.currentKey] ,status:"1"};
       getSpeakerList(paramsData).then(response => {
         this.speakerList = response.resData.items;
       });

@@ -27,9 +27,8 @@
         <el-input type="textarea" autosize placeholder="组织机构简介" v-model="form.media_intro" > </el-input>
       </el-form-item>
       <el-form-item label="组织机构网站">
-        <el-input placeholder="请输入内容" v-model="form.media_url">
-          <template slot="prepend">Http://</template>
-        </el-input>
+        <el-input placeholder="请输入内容" v-model="form.media_url"></el-input>
+        <span>请加上http或https</span>
       </el-form-item>
       <el-form-item label="备注信息">
         <el-input type="textarea" autosize placeholder="备注信息" v-model="form.media_remark"> </el-input>
