@@ -144,11 +144,11 @@ export default {
         },
         {
           value: "1",
-          label: "产品联盟"
+          label: "联盟新闻"
         },
         {
           value: "2",
-          label: "医疗传媒"
+          label: "行业新闻"
         }
       ],
       showType: null,
