@@ -140,9 +140,12 @@ export default {
       this.listQuery.currentPage = this.currentPage;
       this.listQuery.pageSize = this.pageSize;
       getHotelList(this.listQuery).then(response => {
-        this.list = response.resData.items
-        this.totalData = parseInt(response.resData.page.total)
-        this.listLoading = false
+        console.log(222,response);
+        if(response && response.resData){
+          this.list = response.resData.items
+          this.totalData = parseInt(response.resData.page.total)
+          this.listLoading = false
+        }
       })
     },
     handleSizeChange(val) {

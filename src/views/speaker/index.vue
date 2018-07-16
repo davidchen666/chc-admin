@@ -146,9 +146,12 @@ export default {
       this.listQuery.currentPage = this.currentPage;
       this.listQuery.pageSize = this.pageSize;
       getSpeakerList(this.listQuery).then(response => {
-        this.list = response.resData.items;
-        this.totalData = parseInt(response.resData.page.total);
-        this.listLoading = false;
+        if(response.resData){
+          this.list = response.resData.items;
+          this.totalData = parseInt(response.resData.page.total);
+          this.listLoading = false;
+        }
+        
       });
     },
     handleSizeChange(val) {
