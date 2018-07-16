@@ -8,7 +8,7 @@ module.exports = {
   // BASE_TOTAL_API: '"http://www.dxx-tech.top/chc-api/"',
 
   //chc
-  BASE_API: '"http://www1.chconsultant.com/chc-api/"',
-  BASE_URL: '"http://www1.chconsultant.com/"',
-  BASE_TOTAL_API: '"http://www1.chconsultant.com/chc-api/"',
+  BASE_API: '"http://www.chconsultant.com/chc-api/"',
+  BASE_URL: '"http://www.chconsultant.com/"',
+  BASE_TOTAL_API: '"http://www.chconsultant.com/chc-api/"',
 }
