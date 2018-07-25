@@ -274,7 +274,7 @@ export default {
       };
       let tableData = '';
       let header = ['报名ID', '会议ID','会议名称','公司名称', '公司发票抬头', '公司税号', '电话', '传真', '邮政地址', '邮编', '付费价格', '付费渠道', '发票状态', '备注','报名时间','更新时间',
-      '报名人姓名','报名人电话','报名职位','报名人邮箱'];
+      '报名人姓名','报名人电话','报名职位','报名人邮箱','报名渠道'];
       getEventsRegisterList(myParams).then(response => {
         let totalTableData = [];
         response.resData.items.forEach((element,index) => {
@@ -283,7 +283,9 @@ export default {
               totalTableData.push([element.com_id,element.events_id,element.events_name,element.com_name,
               element.com_invoices_title,element.com_duty_num,element.com_phone,element.com_fax,
               element.com_postal_addr,element.com_postal_code,element.pay_price,element.pay_method,element.invoice_state == 1 ? '已开':'未开',
-              element.remark,element.create_date,element.update_date,val.user_name,val.user_mobile,val.user_job,val.user_email]);
+              element.remark,element.create_date,element.update_date,val.user_name,val.user_mobile,val.user_job,val.user_email,
+              element.com_from == '1' ? 'EDM（电子邮件）': element.com_from == '2' ? '微信' : element.com_from == '3' ? ' 媒体网站' : element.com_from == '4' ? '网上搜索' : element.com_from == '5' ? '他人推荐': '其他' 
+              ]);
             });
           }
         });

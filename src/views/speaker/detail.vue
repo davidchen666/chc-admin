@@ -29,6 +29,7 @@
       </el-form-item>
       <el-form-item label="嘉宾介绍">
         <el-input type="textarea" autosize placeholder="嘉宾介绍" v-model="form.speaker_detail_intro" > </el-input>
+        <span>*若是英文介绍，请使用 “[en]” 作为开头 </span>
       </el-form-item>
       <el-form-item label="备注信息">
         <el-input type="textarea" autosize placeholder="备注信息" v-model="form.speaker_remark" > </el-input>

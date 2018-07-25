@@ -28,10 +28,20 @@ service.interceptors.request.use(config => {
 //respone拦截器
 service.interceptors.response.use(
   response => {
+    let res;
+    // IE9时response.data是undefined，因此需要使用response.request.responseText(Stringify后的字符串)
+    if (response.data == undefined) {
+      res = response.request.responseText
+    } else {
+      res = response.data
+    }
+    // 判断data不是Object时，解析成Object
+    if (!(res instanceof Object)) {
+      res = eval('(' + res + ')');
+    }
   /**
   * code为非20000是抛错 可结合自己业务进行修改
   */
-    const res = response.data
     // console.log(res);
     if (res.resCode !== 200 ) {
       Message({
@@ -54,10 +64,7 @@ service.interceptors.response.use(
       // }
       // return Promise.reject('error')
     } else {
-      // if(response.data){
-      //   consoel.log(response.data)
-        return response.data
-      // }
+      return res
     }
   },
   error => {
