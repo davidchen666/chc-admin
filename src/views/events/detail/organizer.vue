@@ -11,6 +11,11 @@
                     <el-option v-for="item in listData" :key="item.media_id" :value="item.media_id" :label="item.media_name"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item label="支持单位">
+                <el-select v-model="form.events_organizer_supporter" multiple filterable remote reserve-keyword placeholder="请输入关键词" :loading="searchLoading" :remote-method="fetchList">
+                    <el-option v-for="item in listData" :key="item.media_id" :value="item.media_id" :label="item.media_name"></el-option>
+                </el-select>
+            </el-form-item>
             <el-form-item label="战略伙伴">
                 <el-select v-model="form.events_organizer_starategic_partner" multiple filterable remote reserve-keyword placeholder="请输入关键词" :loading="searchLoading" :remote-method="fetchList">
                     <el-option v-for="item in listData" :key="item.media_id" :value="item.media_id" :label="item.media_name"></el-option>
@@ -40,11 +45,12 @@ export default {
       searchLoading: false,
       listData: [],
       queryData:
-        "events_organizer_organizer,events_organizer_co_organizer,events_organizer_starategic_partner,events_organizer_media_support",
+        "events_organizer_organizer,events_organizer_co_organizer,events_organizer_supporter,events_organizer_starategic_partner,events_organizer_media_support",
       form: {
         events_id: "",
         events_organizer_organizer: [],
         events_organizer_co_organizer: [],
+        events_organizer_supporter: [],
         events_organizer_starategic_partner: [],
         events_organizer_media_support: []
       }
@@ -85,6 +91,12 @@ export default {
             .resData.items[0].events_organizer_co_organizer
             ? JSON.parse(
                 response.resData.items[0].events_organizer_co_organizer
+              )
+            : [];
+            response.resData.items[0].events_organizer_supporter = response
+            .resData.items[0].events_organizer_supporter
+            ? JSON.parse(
+                response.resData.items[0].events_organizer_supporter
               )
             : [];
           response.resData.items[0].events_organizer_starategic_partner = response
